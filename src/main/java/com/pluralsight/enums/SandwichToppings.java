@@ -1,6 +1,6 @@
 package com.pluralsight.enums;
 
-public enum SandwichToppingType {
+public enum SandwichToppings {
     STEAK,
     HAM,
     SALAMI,

@@ -1,6 +1,6 @@
 package com.pluralsight.enums;
 
-public enum PizzaToppingType {
+public enum PizzaToppings {
 
     // Meats
     PEPPERONI(ToppingCategory.PREMIUM),
@@ -30,7 +30,7 @@ public enum PizzaToppingType {
 
     private final ToppingCategory category;
 
-    PizzaToppingType(ToppingCategory category) {
+    PizzaToppings(ToppingCategory category) {
         this.category = category;
     }
 
