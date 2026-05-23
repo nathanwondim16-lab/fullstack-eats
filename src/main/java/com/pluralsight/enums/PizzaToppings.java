@@ -2,39 +2,49 @@ package com.pluralsight.enums;
 
 public enum PizzaToppings {
 
-    // Meats
-    PEPPERONI(ToppingCategory.PREMIUM),
-    SAUSAGE(ToppingCategory.PREMIUM),
-    HAM(ToppingCategory.PREMIUM),
-    BACON(ToppingCategory.PREMIUM),
-    CHICKEN(ToppingCategory.PREMIUM),
-    MEATBALL(ToppingCategory.PREMIUM),
+    /*
+    PREMIUM
 
-    // Cheeses
-    MOZZARELLA(ToppingCategory.PREMIUM),
-    PARMESAN(ToppingCategory.PREMIUM),
-    RICOTTA(ToppingCategory.PREMIUM),
-    GOAT_CHEESE(ToppingCategory.PREMIUM),
-    BUFFALO(ToppingCategory.PREMIUM),
+                            Meats:
+     */
+    PEPPERONI(ToppingCategory.MEAT, ToppingTier.PREMIUM),
+    SAUSAGE(ToppingCategory.MEAT, ToppingTier.PREMIUM),
+    HAM(ToppingCategory.MEAT, ToppingTier.PREMIUM),
+    BACON(ToppingCategory.MEAT, ToppingTier.PREMIUM),
+    CHICKEN(ToppingCategory.MEAT, ToppingTier.PREMIUM),
+    MEATBALL(ToppingCategory.MEAT, ToppingTier.PREMIUM),
 
-    // Vegetables
-    ONIONS(ToppingCategory.REGULAR),
-    MUSHROOMS(ToppingCategory.REGULAR),
-    BELL_PEPPERS(ToppingCategory.REGULAR),
-    OLIVES(ToppingCategory.REGULAR),
-    TOMATOES(ToppingCategory.REGULAR),
-    SPINACH(ToppingCategory.REGULAR),
-    BASIL(ToppingCategory.REGULAR),
-    PINEAPPLE(ToppingCategory.REGULAR),
-    ANCHOVIES(ToppingCategory.REGULAR);
+    //                      Cheeses
+    MOZZARELLA(ToppingCategory.CHEESE, ToppingTier.PREMIUM),
+    PARMESAN(ToppingCategory.CHEESE, ToppingTier.PREMIUM),
+    RICOTTA(ToppingCategory.CHEESE, ToppingTier.PREMIUM),
+    GOAT_CHEESE(ToppingCategory.CHEESE, ToppingTier.PREMIUM),
+    BUFFALO(ToppingCategory.CHEESE, ToppingTier.PREMIUM),
+
+    // REGULAR
+    ONIONS(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    MUSHROOMS(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    BELL_PEPPERS(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    OLIVES(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    TOMATOES(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    SPINACH(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    BASIL(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    PINEAPPLE(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    ANCHOVIES(ToppingCategory.OTHER, ToppingTier.REGULAR);
 
     private final ToppingCategory category;
+    private final ToppingTier tier;
 
-    PizzaToppings(ToppingCategory category) {
+    PizzaToppings(ToppingCategory category, ToppingTier tier) {
         this.category = category;
+        this.tier = tier;
     }
 
     public ToppingCategory getCategory() {
         return category;
+    }
+
+    public ToppingTier getTier() {
+        return tier;
     }
 }

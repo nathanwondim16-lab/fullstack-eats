@@ -1,6 +1,6 @@
 package com.pluralsight.models;
 
-public class Topping<T> {
+public class Topping<T extends Enum<T>> {
     private final T type;
     private final boolean isExtra;
 
