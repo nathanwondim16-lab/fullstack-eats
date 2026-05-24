@@ -1,5 +1,10 @@
 package com.pluralsight.enums;
 
+import com.pluralsight.ui.UserInterface;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public enum SandwichToppings {
 
     /*
@@ -20,7 +25,12 @@ public enum SandwichToppings {
     CHEDDAR(ToppingCategory.CHEESE, ToppingTier.PREMIUM),
     SWISS(ToppingCategory.CHEESE, ToppingTier.PREMIUM),
 
-    // REGULAR
+    /*
+    REGULAR
+
+
+                         Other toppings
+     */
     LETTUCE(ToppingCategory.OTHER, ToppingTier.REGULAR),
     PEPPERS(ToppingCategory.OTHER, ToppingTier.REGULAR),
     ONIONS(ToppingCategory.OTHER, ToppingTier.REGULAR),
@@ -29,7 +39,15 @@ public enum SandwichToppings {
     CUCUMBERS(ToppingCategory.OTHER, ToppingTier.REGULAR),
     PICKLES(ToppingCategory.OTHER, ToppingTier.REGULAR),
     GUACAMOLE(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    MUSHROOMS(ToppingCategory.OTHER, ToppingTier.REGULAR);
+    MUSHROOMS(ToppingCategory.OTHER, ToppingTier.REGULAR),
+
+    //                       Sauces
+    MAYO(ToppingCategory.SAUCE, ToppingTier.REGULAR),
+    MUSTARD(ToppingCategory.SAUCE, ToppingTier.REGULAR),
+    KETCHUP(ToppingCategory.SAUCE, ToppingTier.REGULAR),
+    RANCH(ToppingCategory.SAUCE, ToppingTier.REGULAR),
+    THOUSAND_ISLANDS(ToppingCategory.SAUCE, ToppingTier.REGULAR),
+    VINAIGRETTE(ToppingCategory.SAUCE, ToppingTier.REGULAR);
 
 
     private final ToppingCategory category;
@@ -46,5 +64,58 @@ public enum SandwichToppings {
 
     public ToppingTier getTier() {
         return tier;
+    }
+
+    public static String getAllToppings() {
+        return Arrays.stream(SandwichToppings.values()).map(Enum::toString).collect(Collectors.joining(", "));
+    }
+
+    public static void displayToppingsByCategory() {
+
+        for(ToppingCategory category : ToppingCategory.values()) {
+
+            int width = Arrays.stream(SandwichToppings.values())
+                    .filter(topping -> topping.getCategory() == category)
+                    .map(Enum::toString)
+                    .mapToInt(String::length)
+                    .max()
+                    .orElse(category.toString().length());
+
+            String tableTitle = category + "S";
+
+            width = Math.max(width, tableTitle.length());
+
+            createTable(width, tableTitle);
+
+            int finalWidth = width;
+
+            Arrays.stream(SandwichToppings.values())
+                    .filter(topping -> topping.getCategory() == category)
+                    .forEach(topping -> {
+                        String row = String.format("║ %-" + finalWidth + "s ║", topping);
+                        UserInterface.printToConsole(row, Colors.TRON);
+                    });
+
+            String bottomBox = "╚" + repeat("═", width + 2) + "╝";
+            UserInterface.printToConsole(bottomBox, Colors.TRON);
+
+        }
+    }
+
+    private static void createTable(int width, String tableName) {
+        String topBox = "╔" + repeat("═", width + 2) + "╗";
+
+        String middleBox = "╠" + repeat("═", width + 2) + "╣";
+
+        String headerFormat = "║ %-" + width + "s ║";
+
+        UserInterface.printToConsole(topBox, Colors.TRON);
+        UserInterface.printToConsole(String.format(headerFormat, tableName), Colors.TRON);
+        UserInterface.printToConsole(middleBox, Colors.TRON);
+
+    }
+
+    private static String repeat(String text, int boxAmount) {
+        return text.repeat(boxAmount);
     }
 }

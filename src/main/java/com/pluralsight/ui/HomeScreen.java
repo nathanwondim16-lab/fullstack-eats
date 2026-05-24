@@ -16,7 +16,7 @@ public class HomeScreen {
                     Select Option ❯\s""");
 
             switch(userChoice) {
-                //case 1 -> OrderScreen.startOrder();
+                case 1 -> OrderScreen.startOrder();
                 case 0 -> UserInterface.endApplication("GOODBYE 👋🏾");
 
                 default -> UserInterface.invalidOption();
