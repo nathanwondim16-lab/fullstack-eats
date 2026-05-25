@@ -70,6 +70,32 @@ public enum SandwichToppings {
         return Arrays.stream(SandwichToppings.values()).map(Enum::toString).collect(Collectors.joining(", "));
     }
 
+    public static void displayToppings(ToppingCategory category) {
+        int width = Arrays.stream(SandwichToppings.values())
+                .filter(topping -> topping.getCategory() == category)
+                .map(Enum::toString)
+                .mapToInt(String::length)
+                .max()
+                .orElse(category.toString().length());
+
+        String tableTitle = category + "S";
+        width = Math.max(width, tableTitle.length());
+
+        createTable(width, tableTitle);
+
+        int finalWidth = width;
+
+        Arrays.stream(SandwichToppings.values())
+                .filter(topping -> topping.getCategory() == category)
+                .forEach(topping -> {
+                    String row = String.format("║ %-" + finalWidth + "s ║", topping);
+                    UserInterface.printToConsole(row, Colors.TRON);
+                });
+
+        String bottomBox = "╚" + repeat("═", width + 2) + "╝";
+        UserInterface.printToConsole(bottomBox, Colors.TRON);
+    }
+
     public static void displayToppingsByCategory() {
 
         for(ToppingCategory category : ToppingCategory.values()) {
@@ -82,7 +108,6 @@ public enum SandwichToppings {
                     .orElse(category.toString().length());
 
             String tableTitle = category + "S";
-
             width = Math.max(width, tableTitle.length());
 
             createTable(width, tableTitle);
