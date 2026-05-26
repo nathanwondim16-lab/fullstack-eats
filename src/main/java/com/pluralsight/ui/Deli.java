@@ -1,9 +1,8 @@
 package com.pluralsight.ui;
 
-import com.pluralsight.enums.BreadType;
-import com.pluralsight.enums.SandwichSize;
-import com.pluralsight.enums.SandwichToppings;
-import com.pluralsight.enums.ToppingCategory;
+import com.pluralsight.enums.*;
+import com.pluralsight.models.Chips;
+import com.pluralsight.models.Drink;
 import com.pluralsight.models.Sandwich;
 import com.pluralsight.models.Topping;
 
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class Deli {
 
-    public static void orderSandwich() {
+    public static Sandwich orderSandwich() {
 
         UserInterface.printDivider("=");
 
@@ -42,51 +41,52 @@ public class Deli {
                 ╚═══════════════════════════════╝
                 """);
 
-        UserInterface.printToConsole("\nCHOOSE A BREAD 🍞");
-
         UserInterface.printOnSameLine(BreadType.getAllBreads());
 
-        BreadType breadChoice = BreadType.valueOf(UserInterface.promptForInput("\nSelect bread ❯ ").toUpperCase());
-
-        UserInterface.printToConsole("\nCHOOSE SANDWICH SIZE 📏");
+        BreadType breadChoice = BreadType.valueOf(UserInterface.promptForInput("\nSelect your bread ❯ ").toUpperCase());
 
         UserInterface.printOnSameLine(SandwichSize.getAllSizes());
 
-        SandwichSize sandwichSize = SandwichSize.valueOf(UserInterface.promptForInput("\nSelect size ❯ ").toUpperCase());
-
-        String isToasted = UserInterface.promptForInput("Do you want your sandwich toasted ❯ ");
-
-        Sandwich sandwich = new Sandwich(breadChoice, sandwichSize, isToasted.equalsIgnoreCase("yes"));
+        SandwichSize sandwichSize = SandwichSize.valueOf(UserInterface.promptForInput("\nSandwich size ❯ ").toUpperCase());
 
         UserInterface.printToConsole("\nTOPPINGS 🍗🌶️🧀🍅");
+
+        List<Topping<SandwichToppings>> toppings = new ArrayList<>();
 
         for(ToppingCategory category : ToppingCategory.values()) {
 
 
-            UserInterface.printToConsole("SELECT " + category.toString() + "TOPPINGS");
+            //UserInterface.printToConsole("■\t" + category.getName() + ":");
 
             while(true) {
                 SandwichToppings.displayToppings(category);
 
                 // Give users the option to enter no if they don't want to add any toppings
-                String topping = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
+                String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
 
-                if(topping.equalsIgnoreCase("skip")) {
+                if(toppingChoice.equalsIgnoreCase("skip")) {
                     break;
                 }
 
+                // Asks user if they want extra of X topping.
+                boolean isExtra = UserInterface.promptForInput("Do you want extra on your sandwich? ").equalsIgnoreCase("yes");
 
-                String isExtra = UserInterface.promptForInput("Do you want extra on your sandwich? ");
+                String finished = UserInterface.promptForInput("Are you done adding " + (category + "s to your sandwich ❯ ").toLowerCase());
 
-                String finished = UserInterface.promptForInput("Are you done adding " + category + "S to your sandwich ❯");
-
-                sandwich.addTopping(new Topping<>(SandwichToppings.valueOf(topping), isExtra.equalsIgnoreCase("yes")));
+                // Adds topping to the list of toppings
+                toppings.add(new Topping<>(SandwichToppings.valueOf(toppingChoice), isExtra));
 
                 if(finished.equalsIgnoreCase("yes")) {
                     break;
                 }
             }
         }
+
+        boolean isToasted = UserInterface.promptForInput("Do you want your sandwich toasted ❯ ").equalsIgnoreCase("yes");
+
+        Sandwich sandwich = new Sandwich(breadChoice, sandwichSize, isToasted);
+
+        toppings.forEach(sandwich::addTopping);
 
         UserInterface.printToConsole("HERE ARE YOU SANDWICH DETAILS: \n");
 
@@ -103,5 +103,33 @@ public class Deli {
                 sandwich.getToppings().toString(),
                 sandwich.getPrice())
         );
+
+        return sandwich;
+    }
+
+    public static Drink orderDrink() {
+        UserInterface.printToConsole("\nCHOOSE A DRINK BELOW");
+
+        UserInterface.printToConsole(DrinkFlavors.displayFlavors());
+
+        DrinkFlavors flavor = DrinkFlavors.valueOf(UserInterface.promptForInput("Select flavor ❯ ").toUpperCase());
+
+        UserInterface.printToConsole("\nCHOOSE A SIZE");
+
+        UserInterface.printToConsole(DrinkSize.displayDrinkSizes());
+
+        DrinkSize drinkSize = DrinkSize.valueOf(UserInterface.promptForInput("Select size ❯").toUpperCase());
+
+        return new Drink(flavor, drinkSize);
+    }
+
+    public static Chips orderChips() {
+        UserInterface.printToConsole("\nWHAT CHIPS WOULD YOU LIKE");
+
+        UserInterface.printToConsole(ChipFlavors.displayFlavors());
+
+        ChipFlavors chips = ChipFlavors.valueOf(UserInterface.promptForInput("Select flavor ❯ ").toUpperCase());
+
+        return new Chips(chips);
     }
 }
