@@ -1,6 +1,5 @@
 package com.pluralsight.models;
 
-import com.pluralsight.enums.BreadType;
 import com.pluralsight.enums.Colors;
 import com.pluralsight.interfaces.Chargeable;
 import com.pluralsight.ui.UserInterface;
@@ -75,7 +74,7 @@ public class Order {
         OrderItem item = order.stream().filter(orderItem -> orderItem.getItemID() == itemID).findFirst().orElse(null);
 
         if(item != null) {
-            item.getItem().editOrder();
+            item.getItem().editItem();
         }
     }
 

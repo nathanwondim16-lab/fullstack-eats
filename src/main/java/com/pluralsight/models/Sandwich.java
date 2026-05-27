@@ -33,90 +33,81 @@ public class Sandwich extends Food<SandwichToppings> {
 
     @Override
     public double getPrice() {
-        return sandwichSize.getSandwichSizePrice() + getToppings().stream().mapToDouble(sandwichSize::getToppingPrice).sum();
+        return sandwichSize.getSandwichSizePrice()
+                + getToppings().stream()
+                .mapToDouble(sandwichSize::getToppingPrice)
+                .sum();
     }
 
     @Override
-    public void editOrder() {
+    public void editItem() {
         while(true) {
             int option = UserInterface.promptForNumber("""
-                
-                What do you want to change about your sandwich?
-                
-                1) size
-                2) bread
-                3) toppings
-                4) toasting
-                
-                Select Option ❯\s""");
+                    
+                    WHAT DO YOU WANT TO CHANGE ABOUT YOUR SANDWICH?
+                    
+                    1) Size
+                    2) Bread
+                    3) Toppings
+                    4) Toasting
+                    0) Done
+                    
+                    Select Option ❯\s""");
 
             switch(option) {
-                case 1 -> {
-                    UserInterface.printToConsole("\nWhat size do you want to change your sandwich to?", Colors.GOLD);
-
-                    SandwichSize.getAllSizes();
-
-                    int sizeChoice = UserInterface.promptForNumber("\nSANDWICH SIZE ❯ ");
-
-                    sandwichSize = Arrays.stream(SandwichSize.values())
-                            .filter(size -> size.getDisplaySize() == sizeChoice).findFirst().orElse(null);
+                case 1 -> changeSize();
+                case 2 -> changeBread();
+                case 3 -> editToppings(SandwichToppings.class);
+                case 4 -> changeToastedStatus();
+                case 0 -> {
+                    UserInterface.printToConsole("\nCHANGES TO YOUR SANDWICH HAVE BEEN SAVED ✅\n", Colors.GREEN);
                 }
 
-                case 2 -> {
-                    UserInterface.printToConsole("\nWhat bread do you want to switch to?", Colors.GOLD);
-
-                    BreadType.getAllBreads();
-
-                    breadType = BreadType.valueOf(UserInterface.promptForInput("\nSELECT BREAD ❯ ").toUpperCase());
-                }
-
-                case 3 -> {
-                    for(Topping<SandwichToppings> topping : getToppings()) {
-
-                        UserInterface.printToConsole("Topping: " + topping.getType().name());
-
-                        String changeTopping = UserInterface.promptForInput("Do you want to change this topping? ❯ ");
-
-                        if(changeTopping.equalsIgnoreCase("yes")) {
-                            int choice = UserInterface.promptForNumber("""
-                                    
-                                    1) Remove topping
-                                    2) Remove extra amount
-                                    3) Remove and add different topping
-                                    
-                                    Select Option ❯\s""");
-
-                            switch(choice) {
-                                case 1 -> removeTopping(topping);
-                                case 2 -> topping.setExtra();
-                                case 3 -> {
-                                    removeTopping(topping);
-
-                                    SandwichToppings newTopping = SandwichToppings.valueOf(UserInterface.promptForInput("Enter new topping ❯ ").toUpperCase());
-
-                                    boolean isExtra = UserInterface.promptForInput("Do you want extra " + newTopping + " on your sandwich? ").equalsIgnoreCase("yes");
-
-                                    Topping<SandwichToppings> changedTopping = new Topping<>(newTopping, isExtra);
-
-                                    addTopping(changedTopping);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                case 4 -> {
-                    isToasted = !isToasted;
-                }
+                default -> UserInterface.invalidOption();
             }
-
-            String changeMore = UserInterface.promptForInput("Is there anything else you want to change? (Yes) or (No) ❯ ");
-
-            if(changeMore.equalsIgnoreCase("no")) {
-                break;
-            }
-
         }
+    }
+
+    private void changeSize() {
+        UserInterface.printToConsole("\nWHAT SIZE DO YOU WANT TO CHANGE YOUR SANDWICH TO?", Colors.GOLD);
+
+        SandwichSize.getAllSizes();
+
+        int sizeChoice = UserInterface.promptForNumber("\nSANDWICH SIZE ❯ ");
+
+        SandwichSize selectedSize = Arrays.stream(SandwichSize.values())
+                .filter(size -> size.getDisplaySize() == sizeChoice)
+                .findFirst()
+                .orElse(null);
+
+        if(selectedSize == null) {
+            UserInterface.invalidOption();
+            return;
+        }
+
+        sandwichSize = selectedSize;
+
+        UserInterface.printToConsole("\nSIZE HAS BEEN CHANGED ✅\n", Colors.GREEN);
+    }
+
+    private void changeBread() {
+        UserInterface.printToConsole("\nWHAT BREAD DO YOU WANT TO SWITCH TO?", Colors.GOLD);
+
+        BreadType.getAllBreads();
+
+        try {
+            breadType = BreadType.valueOf(UserInterface.promptForInput("\n SELECT BREAD ❯ ").toUpperCase());
+
+            UserInterface.printToConsole("\nBREAD HAS BEEN CHANGED ✅\n", Colors.GREEN);
+        } catch (Exception e) {
+            UserInterface.invalidOption();
+        }
+    }
+
+    private void changeToastedStatus() {
+        isToasted = !isToasted;
+
+        UserInterface.printToConsole("\nSANDWICH IS NOW " + (isToasted ? "TOASTED ✅" : "NOT TOASTED ❌"), Colors.GREEN);
     }
 
     @Override
@@ -126,12 +117,10 @@ public class Sandwich extends Food<SandwichToppings> {
                 \t\t• %s" %s bread
                 """, sandwichSize.getDisplaySize(), breadType);
 
-        getToppings().forEach(topping -> UserInterface.printToConsoleFormatted("""
-                \t\t• %s %s
-                """, topping.getType(), topping.isExtra() ? "(Extra)" : ""));
+        displayToppings();
 
-        String toasted = isToasted ? "Toasted" : "Not toasted";
-
-        UserInterface.printToConsoleFormatted("\t\t• " + toasted);
+        UserInterface.printToConsoleFormatted("""
+                \t\t• %s\n
+                """, isToasted ? "Toasted" : "Not toasted");
     }
 }

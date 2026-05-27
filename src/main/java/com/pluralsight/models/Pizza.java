@@ -31,7 +31,7 @@ public class Pizza extends Food<PizzaToppings> {
     }
 
     @Override
-    public void editOrder() {
+    public void editItem() {
 
     }
 }

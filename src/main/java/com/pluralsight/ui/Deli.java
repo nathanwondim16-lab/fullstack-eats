@@ -26,72 +26,90 @@ public class Deli {
                 ╚════════════════════════╝
                 """, Colors.ORANGE_JUICE);
 
-        UserInterface.printToConsole("\n⦿ BREAD OPTIONS:\n", Colors.GOLD);
-
-        BreadType breadChoice;
-        SandwichSize sandwichSize;
-
-        while(true) {
-            try {
-                BreadType.getAllBreads();
-
-                breadChoice = BreadType.valueOf(UserInterface.promptForInput("\nSELECT BREAD ❯ ").toUpperCase());
-
-                UserInterface.printToConsole("\n⦿ BREAD SIZES:\n", Colors.GOLD);
-
-                SandwichSize.getAllSizes();
-
-                int sizeChoice = UserInterface.promptForNumber("\nSANDWICH SIZE ❯ ");
-
-                sandwichSize = Arrays.stream(SandwichSize.values())
-                        .filter(size -> size.getDisplaySize() == sizeChoice).findFirst().orElse(null);
-
-                break;
-            } catch (Exception e) {
-                UserInterface.invalidOption();
-            }
-        }
-
-        UserInterface.printToConsole("\n⦿ TOPPINGS:", Colors.GOLD);
-
-        List<Topping<SandwichToppings>> toppings = new ArrayList<>();
-
-        for(ToppingCategory category : ToppingCategory.values()) {
-
-            while(true) {
-                UserInterface.printDivider();
-                SandwichToppings.displayToppings(category);
-
-                // Give users the option to enter no if they don't want to add any toppings
-                String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
-
-                if(toppingChoice.equalsIgnoreCase("skip")) {
-                    break;
-                }
-
-                // Asks user if they want extra of X topping.
-                boolean isExtra = UserInterface.promptForInput("Do you want extra " + toppingChoice + " on your sandwich? ").equalsIgnoreCase("yes");
-
-                String finished = UserInterface.promptForInput("Are you done adding " + (category + "s to your sandwich ❯ ").toLowerCase());
-
-                // Adds topping to the list of toppings
-                toppings.add(new Topping<>(SandwichToppings.valueOf(toppingChoice), isExtra));
-
-                if(finished.equalsIgnoreCase("yes")) {
-                    break;
-                }
-            }
-        }
-
-        boolean isToasted = UserInterface.promptForInput("\nDo you want your sandwich toasted ❯ ").equalsIgnoreCase("yes");
+        BreadType breadChoice = getBreadType();
+        SandwichSize sandwichSize = getSandwichSize();
+        boolean isToasted = getToasted();
 
         Sandwich sandwich = new Sandwich(breadChoice, sandwichSize, isToasted);
 
-        toppings.forEach(sandwich::addTopping);
+        addSandwichToppings(sandwich);
 
         UserInterface.printToConsole("\nSANDWICH ADDED TO ORDER ✅", Colors.GREEN);
 
         return sandwich;
+    }
+
+    private static BreadType getBreadType() {
+        while(true) {
+            try {
+                UserInterface.printToConsole("\n⦿ BREAD OPTIONS:\n", Colors.GOLD);
+                BreadType.getAllBreads();
+
+                return BreadType.valueOf(UserInterface.promptForInput("\nSELECT BREAD ❯ ").toUpperCase());
+            } catch (Exception e) {
+                UserInterface.invalidOption();
+            }
+        }
+    }
+
+    private static SandwichSize getSandwichSize() {
+        while(true) {
+            UserInterface.printToConsole("\n⦿ BREAD SIZES:\n", Colors.GOLD);
+            SandwichSize.getAllSizes();
+
+            int sizeChoice = UserInterface.promptForNumber("\nSANDWICH SIZE ❯ ");
+
+            SandwichSize selectedSize = Arrays.stream(SandwichSize.values())
+                    .filter(size -> size.getDisplaySize() == sizeChoice)
+                    .findFirst()
+                    .orElse(null);
+
+            if(selectedSize != null) {
+                return selectedSize;
+            }
+
+            UserInterface.invalidOption();
+        }
+    }
+
+    private static boolean getToasted() {
+        return UserInterface.promptForInput("\nDo you want your sandwich toasted ❯ ").equalsIgnoreCase("yes");
+    }
+
+    private static void addSandwichToppings(Sandwich sandwich) {
+        UserInterface.printToConsole("\n⦿ TOPPINGS:", Colors.GOLD);
+
+        Arrays.stream(ToppingCategory.values())
+                .forEach(category -> addToppingsByCategory(sandwich, category));
+    }
+
+    private static void addToppingsByCategory(Sandwich sandwich, ToppingCategory category) {
+        while(true) {
+            UserInterface.printDivider();
+            SandwichToppings.displayToppings(category);
+
+            String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
+
+            if(toppingChoice.equalsIgnoreCase("skip")) {
+                break;
+            }
+
+            try {
+                SandwichToppings selectedTopping = SandwichToppings.valueOf(toppingChoice);
+
+                boolean isExtra = UserInterface.promptForInput("Do you want extra " + selectedTopping + " on your sandwich? ").equalsIgnoreCase("yes");
+
+                sandwich.addTopping(new Topping<>(selectedTopping, isExtra));
+
+                String finished = UserInterface.promptForInput("Are you done adding " + (category.name() + "s to your sandwich ❯ ").toLowerCase());
+
+                if(finished.equalsIgnoreCase("yes")) {
+                    break;
+                }
+            } catch (Exception e) {
+                UserInterface.invalidOption();
+            }
+        }
     }
 
     public static Drink orderDrink() {
@@ -107,7 +125,7 @@ public class Deli {
 
         DrinkSize drinkSize = DrinkSize.valueOf(UserInterface.promptForInput("Select size ❯ ").toUpperCase());
 
-        UserInterface.printToConsole("\nDRINK ADDED TO ORDER ✅", Colors.GREEN);
+        UserInterface.printToConsole("\n" + drinkSize + " " + flavor + " ADDED TO ORDER ✅", Colors.GREEN);
 
         return new Drink(flavor, drinkSize);
     }
@@ -119,7 +137,7 @@ public class Deli {
 
         ChipFlavors chips = ChipFlavors.valueOf(UserInterface.promptForInput("Select flavor ❯ ").toUpperCase());
 
-        UserInterface.printToConsole("\nCHIPS ADDED TO ORDER ✅", Colors.GREEN);
+        UserInterface.printToConsole("\n" + chips + " CHIPS ADDED TO ORDER ✅", Colors.GREEN);
 
         return new Chips(chips);
     }

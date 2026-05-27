@@ -30,7 +30,7 @@ public class Chips implements Chargeable {
     }
 
     @Override
-    public void editOrder() {
+    public void editItem() {
 
     }
 }

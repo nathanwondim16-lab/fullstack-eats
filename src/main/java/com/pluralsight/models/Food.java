@@ -3,8 +3,8 @@ package com.pluralsight.models;
 import com.pluralsight.enums.Colors;
 import com.pluralsight.interfaces.Chargeable;
 import com.pluralsight.ui.UserInterface;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class Food<T extends Enum<T>> implements Chargeable {
@@ -27,13 +27,107 @@ public abstract class Food<T extends Enum<T>> implements Chargeable {
         toppings.remove(topping);
     }
 
-    public List<Topping<T>> getToppings() {
+    public void displayToppings() {
+        if(toppings.isEmpty()) {
+            UserInterface.printToConsole("\t\t• No Toppings");
+            return;
+        }
 
-        return toppings;
+        toppings.forEach(topping -> UserInterface.printToConsoleFormatted("""
+                \t\t• %s %s
+                """, topping.getType(), topping.isExtra() ? "(Extra)" : ""));
     }
 
-    @Override
-    public String toString() {
-        return "";
+    public void editToppings(Class<T> toppingEnum) {
+        while(true) {
+            UserInterface.printToConsole("\nCURRENT TOPPINGS", Colors.GOLD);
+            displayToppings();
+
+            int choice = UserInterface.promptForNumber("""
+                    
+                    What do you want to do?
+                    
+                    1) Add Topping
+                    2) Remove Topping
+                    3) Change Extra
+                    0) Done
+                    
+                    Select Option ❯\s""");
+
+            switch(choice) {
+                case 1 -> addToppingToItem(toppingEnum);
+                case 2 -> removeToppingFromItem(toppingEnum);
+                case 3 -> changeItemExtraStatus(toppingEnum);
+                case 0 -> {
+                    UserInterface.printToConsole("\nTOPPING CHANGES HAVE BEEN SAVED ✅\n", Colors.GREEN);
+                    return;
+                }
+
+                default -> UserInterface.invalidOption();
+            }
+        }
+    }
+
+    private void addToppingToItem(Class<T> toppingEnum) {
+        displayAvailableToppings(toppingEnum);
+
+        T toppingType = promptForTopping(toppingEnum, "\nENTER TOPPING TO ADD ❯ ");
+
+        boolean isExtra = UserInterface.promptForInput("Do you want extra " + toppingType + " on your sandwich? ").equalsIgnoreCase("yes");
+
+        addTopping(new Topping<>(toppingType, isExtra));
+
+        UserInterface.printToConsole("\nTOPPING HAS BEEN ADDED ✅\n", Colors.GREEN);
+    }
+
+    private void removeToppingFromItem(Class<T> toppingEnum) {
+        T toppingType = promptForTopping(toppingEnum, "\nENTER TOPPING TO REMOVE ❯ ");
+
+        Topping<T> toppingToRemove = findTopping(toppingType);
+
+        if(toppingToRemove == null) {
+            UserInterface.printToConsole("\nTHAT TOPPING IS NOT ON THIS ITEM", Colors.CRIMSON);
+        }
+
+        removeTopping(toppingToRemove);
+
+        UserInterface.printToConsole("\nTOPPING HAS BEEN REMOVED ❌\n", Colors.GREEN);
+    }
+
+    private void changeItemExtraStatus(Class<T> toppingEnum) {
+        T toppingType = promptForTopping(toppingEnum, "\nENTER TOPPING TO UPDATE EXTRA STATUS ❯ ");
+
+        Topping<T> topping = findTopping(toppingType);
+
+        if (topping == null) {
+            UserInterface.printToConsole("\nTHIS TOPPING IS NOT ON THIS ITEM", Colors.CRIMSON);
+            return;
+        }
+
+        topping.setExtra();
+
+        UserInterface.printToConsole("\nEXTRA OPTION UPDATED ✅\n", Colors.GREEN);
+    }
+
+    private Topping<T> findTopping(T toppingType) {
+        return toppings.stream()
+                .filter(topping -> topping.getType() == toppingType)
+                .findFirst()
+                .orElse(null);
+    }
+
+    private T promptForTopping(Class<T> toppingEnum, String message) {
+        return Enum.valueOf(toppingEnum, UserInterface.promptForInput(message).toUpperCase());
+    }
+
+    private void displayAvailableToppings(Class<T> toppingEnum) {
+        UserInterface.printToConsole("\nAVAILABLE TOPPINGS", Colors.GOLD);
+
+        Arrays.stream(toppingEnum.getEnumConstants())
+                .forEach(t -> UserInterface.printToConsole("• " + t.name()));
+    }
+
+    public List<Topping<T>> getToppings() {
+        return toppings;
     }
 }

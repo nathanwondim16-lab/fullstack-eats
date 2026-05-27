@@ -34,7 +34,7 @@ public class Drink implements Chargeable {
     }
 
     @Override
-    public void editOrder() {
+    public void editItem() {
 
     }
 }
