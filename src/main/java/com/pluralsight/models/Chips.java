@@ -28,4 +28,9 @@ public class Chips implements Chargeable {
                 Price: $%.2f
                 """, flavor, getPrice());
     }
+
+    @Override
+    public void editOrder() {
+
+    }
 }

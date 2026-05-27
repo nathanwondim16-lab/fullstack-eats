@@ -4,8 +4,6 @@ import com.pluralsight.enums.Colors;
 import com.pluralsight.models.Order;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class OrderScreen {
 
@@ -20,6 +18,8 @@ public class OrderScreen {
                     2) Add Drink
                     3) Add Chips
                     4) Checkout
+                    5) Edit Order
+                    6) Remove Item From Order
                     0) Cancel Order
                     
                     Select Option ❯\s""");
@@ -27,8 +27,14 @@ public class OrderScreen {
                 case 1 -> order.addItemToOrder(Deli.orderSandwich());
                 case 2 -> order.addItemToOrder(Deli.orderDrink());
                 case 3 -> order.addItemToOrder(Deli.orderChips());
-                case 4 -> order.displayOrderDetails();
+                case 4 -> order.displayOrderDetails(); // Also call the method from the File Manager class that saves the order to the file.
+                case 5 -> order.editOrder();
+                case 6 -> {
+                    int itemID = UserInterface.promptForNumber("Enter the ID number of the item you wish to remove ❯ ");
+                    order.removeItemFromOrder(itemID);
+                }
                 case 0 -> {
+                    order.cancelOrder();
                     UserInterface.printToConsole("\nORDER CANCELED ❌", Colors.CRIMSON);
                     return;
                 }

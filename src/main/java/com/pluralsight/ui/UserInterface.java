@@ -35,7 +35,7 @@ public class UserInterface {
     }
 
     public static void invalidOption() {
-        printToConsole("\nINVALID OPTION. PLEASE CHOOSE A VALID OPTION", Colors.CRIMSON);
+        printToConsole("\nINVALID OPTION. PLEASE CHOOSE A VALID OPTION\n", Colors.CRIMSON);
     }
 
     public static void endApplication(String message) {

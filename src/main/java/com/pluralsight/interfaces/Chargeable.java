@@ -4,4 +4,5 @@ public interface Chargeable {
 
     double getPrice();
     void orderDetails();
+    void editOrder();
 }

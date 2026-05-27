@@ -1,15 +1,24 @@
 package com.pluralsight.enums;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public enum BreadType {
-    WHITE,
-    WHEAT,
-    RYE,
-    WRAP;
+    WHITE("White 🍞"),
+    WHEAT("Wheat 🌾"),
+    RYE("Rye 🥖"),
+    WRAP("Wrap 🥬");
 
-    public static String getAllBreads() {
-        return Arrays.stream(BreadType.values()).map(Enum::toString).collect(Collectors.joining(", "));
+    private final String displayName;
+
+    BreadType(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public static void getAllBreads() {
+        Arrays.stream(BreadType.values()).map(type -> "◆ " + type.displayName).forEach(System.out::println);
     }
 }

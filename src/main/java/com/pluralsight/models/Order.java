@@ -1,5 +1,6 @@
 package com.pluralsight.models;
 
+import com.pluralsight.enums.BreadType;
 import com.pluralsight.enums.Colors;
 import com.pluralsight.interfaces.Chargeable;
 import com.pluralsight.ui.UserInterface;
@@ -9,18 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private final List<Chargeable> order;
-    private int orderNumber = 1;
+    private final List<OrderItem> order;
+    private int itemID = 0;
+    private static int orderID = 0;
 
     private final LocalDate orderDate;
 
     public Order(LocalDate orderDate) {
         order = new ArrayList<>();
         this.orderDate = orderDate;
-        orderNumber++;
+        orderID++;
+        itemID++;
     }
 
-    public List<Chargeable> getOrder() {
+    public List<OrderItem> getOrder() {
         return order;
     }
 
@@ -28,32 +31,65 @@ public class Order {
         return orderDate;
     }
 
-    public int getOrderNumber() {
-        return orderNumber;
+    public static int getOrderID() {
+        return orderID;
+    }
+
+    public int getItemID() {
+        return itemID;
     }
 
     public void addItemToOrder(Chargeable item) {
-        order.add(item);
+        order.add(new OrderItem(itemID++, item));
     }
 
-    public void removeItemFromOrder(Chargeable item) {
-        if(!order.contains(item)) {
-            UserInterface.printToConsole("Item doesn't exist so it cannot be removed", Colors.CRIMSON);
-            return;
+    public void removeItemFromOrder(int itemID) {
+        for(OrderItem orderItem : order) {
+            if(orderItem.getItemID() == itemID) {
+                order.remove(orderItem);
+
+                // Sorts items back in order by ID
+                for(int i = 0; i < order.size(); i++) {
+                    order.get(i).setItemID(i + 1);
+                }
+
+                UserInterface.printToConsole("\nITEM HAS BEEN REMOVED ❌", Colors.GREEN);
+                return;
+            }
         }
 
-        order.remove(item);
+        UserInterface.printToConsole("CANNOT REMOVE ITEM SINCE IT DOESN'T EXIST IN ORDER ID: " + orderID, Colors.CRIMSON);
+    }
+
+    public void cancelOrder() {
+        order.clear();
+        orderID = 0;
+    }
+
+    public void editOrder() {
+        UserInterface.printToConsole("\nHERE IS EVERYTHING YOU'VE ADDED TO YOUR ORDER SO FAR\n");
+        displayOrderDetails();
+
+        int itemID = UserInterface.promptForNumber("Enter the ID number of the item you wish to edit ❯ ");
+
+        OrderItem item = order.stream().filter(orderItem -> orderItem.getItemID() == itemID).findFirst().orElse(null);
+
+        if(item != null) {
+            item.getItem().editOrder();
+        }
     }
 
     public void displayOrderDetails() {
-        UserInterface.printToConsole("\nORDER DETAILS", Colors.GOLD);
-        order.forEach(item -> {
+        UserInterface.printToConsole("\nORDER ID: " + orderID + " DETAILS", Colors.GOLD);
+        order.forEach(orderItem -> {
             UserInterface.printDivider();
-            item.orderDetails();
+            UserInterface.printToConsole("ITEM ID: " + orderItem.getItemID(), Colors.TRON);
+            orderItem.getItem().orderDetails();
         });
 
-        double total = order.stream().mapToDouble(Chargeable::getPrice).sum();
+        double total = order.stream().mapToDouble(orderItem -> orderItem.getItem().getPrice()).sum();
 
+        UserInterface.printDivider();
         UserInterface.printToConsoleFormatted("""
                 
                 TOTAL: $%.2f

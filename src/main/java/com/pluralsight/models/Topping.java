@@ -1,3 +1,23 @@
 package com.pluralsight.models;
 
-public record Topping<T extends Enum<T>>(T type, boolean isExtra) {}
+public class Topping<T extends Enum<T>> {
+    private final T type;
+    private boolean isExtra;
+
+    public Topping(T type, boolean isExtra) {
+        this.type = type;
+        this.isExtra = isExtra;
+    }
+
+    public T getType() {
+        return type;
+    }
+
+    public boolean isExtra() {
+        return isExtra;
+    }
+
+    void setExtra() {
+        isExtra = false;
+    }
+}

@@ -35,7 +35,7 @@ public enum SandwichToppings {
     PEPPERS(ToppingCategory.OTHER, ToppingTier.REGULAR),
     ONIONS(ToppingCategory.OTHER, ToppingTier.REGULAR),
     TOMATOES(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    JALAPEÑOS(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    JALAPENOS(ToppingCategory.OTHER, ToppingTier.REGULAR),
     CUCUMBERS(ToppingCategory.OTHER, ToppingTier.REGULAR),
     PICKLES(ToppingCategory.OTHER, ToppingTier.REGULAR),
     GUACAMOLE(ToppingCategory.OTHER, ToppingTier.REGULAR),
@@ -89,11 +89,11 @@ public enum SandwichToppings {
                 .filter(topping -> topping.getCategory() == category)
                 .forEach(topping -> {
                     String row = String.format("║ %-" + finalWidth + "s ║", topping);
-                    UserInterface.printToConsole(row, Colors.TRON);
+                    UserInterface.printToConsole(row, Colors.LIGHT_BLUE);
                 });
 
         String bottomBox = "╚" + repeat("═", width + 2) + "╝";
-        UserInterface.printToConsole(bottomBox, Colors.TRON);
+        UserInterface.printToConsole(bottomBox, Colors.LIGHT_BLUE);
     }
 
     public static void displayToppingsByCategory() {
@@ -118,11 +118,11 @@ public enum SandwichToppings {
                     .filter(topping -> topping.getCategory() == category)
                     .forEach(topping -> {
                         String row = String.format("║ %-" + finalWidth + "s ║", topping);
-                        UserInterface.printToConsole(row, Colors.TRON);
+                        UserInterface.printToConsole(row, Colors.LIGHT_BLUE);
                     });
 
             String bottomBox = "╚" + repeat("═", width + 2) + "╝";
-            UserInterface.printToConsole(bottomBox, Colors.TRON);
+            UserInterface.printToConsole(bottomBox, Colors.LIGHT_BLUE);
 
         }
     }
@@ -134,9 +134,9 @@ public enum SandwichToppings {
 
         String headerFormat = "║ %-" + width + "s ║";
 
-        UserInterface.printToConsole(topBox, Colors.TRON);
-        UserInterface.printToConsole(String.format(headerFormat, tableName), Colors.TRON);
-        UserInterface.printToConsole(middleBox, Colors.TRON);
+        UserInterface.printToConsole(topBox, Colors.LIGHT_BLUE);
+        UserInterface.printToConsole(String.format(headerFormat, tableName), Colors.LIGHT_BLUE);
+        UserInterface.printToConsole(middleBox, Colors.LIGHT_BLUE);
 
     }
 

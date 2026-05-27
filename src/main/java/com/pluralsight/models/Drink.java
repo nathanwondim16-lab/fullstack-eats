@@ -32,4 +32,9 @@ public class Drink implements Chargeable {
                 %-10s $%.2f
                 """, "Drink:", flavor, "Size:", drinkSize, "Price:", getPrice());
     }
+
+    @Override
+    public void editOrder() {
+
+    }
 }

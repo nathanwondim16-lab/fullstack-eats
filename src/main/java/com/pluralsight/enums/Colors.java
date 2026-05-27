@@ -3,6 +3,7 @@ package com.pluralsight.enums;
 public enum Colors {
 
     TRON(125, 253, 254),
+    LIGHT_BLUE(51, 153, 255),
     ORANGE_JUICE(255,128,0),
     GOLD(255, 215, 0),
     GREEN(76, 175, 80),

@@ -1,12 +1,10 @@
 package com.pluralsight.ui;
 
 import com.pluralsight.enums.*;
-import com.pluralsight.models.Chips;
-import com.pluralsight.models.Drink;
-import com.pluralsight.models.Sandwich;
-import com.pluralsight.models.Topping;
+import com.pluralsight.models.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Deli {
@@ -15,47 +13,53 @@ public class Deli {
 
         UserInterface.printDivider();
 
-        UserInterface.printToConsole("""
-                  ________________________
-                 /                      /|
-                /______________________/ |
-                |                      | |
-                |   THE DELI COUNTER   | |
-                |======================| |
-                |                      | |
-                |   🥪 🥪 🥪 🥪       | |
-                |                      | |
-                |  Fresh Ingredients   | |
-                |  Fresh Bread Daily   | |
-                |  Made To Order       | |
-                |______________________|/
-                
-                
-                ╔═══════════════════════════════╗
-                ║      CUSTOMER FAVORITES       ║
-                ╠═══════════════════════════════╣
-                ║  🥓 Bacon Ranch Melt          ║
-                ║  🥩 Steak & Cheese Supreme    ║
-                ║  🥪 Triple Stack Club         ║
-                ║  🌶️ Spicy Chipotle Chicken    ║
-                ╚═══════════════════════════════╝
-                """);
+        UserInterface.printToConsoleFormatted("""
+                ╔════════════════════════╗
+                ║   FULLSTACK DELI       ║
+                ║════════════════════════║
+                ║ 🥓  Ham & Bacon        ║
+                ║ 🧀 Swiss & Cheddar     ║
+                ║ 🥬 Fresh Veggies       ║
+                ║ 🔥 Toasted Subs        ║
+                ║                        ║
+                ║  ★ CODE. EAT. REPEAT ★ ║
+                ╚════════════════════════╝
+                """, Colors.ORANGE_JUICE);
 
-        UserInterface.printOnSameLine(BreadType.getAllBreads());
+        UserInterface.printToConsole("\n⦿ BREAD OPTIONS:\n", Colors.GOLD);
 
-        BreadType breadChoice = BreadType.valueOf(UserInterface.promptForInput("\nSelect your bread ❯ ").toUpperCase());
+        BreadType breadChoice;
+        SandwichSize sandwichSize;
 
-        UserInterface.printOnSameLine(SandwichSize.getAllSizes());
+        while(true) {
+            try {
+                BreadType.getAllBreads();
 
-        SandwichSize sandwichSize = SandwichSize.valueOf(UserInterface.promptForInput("\nSandwich size ❯ ").toUpperCase());
+                breadChoice = BreadType.valueOf(UserInterface.promptForInput("\nSELECT BREAD ❯ ").toUpperCase());
 
-        UserInterface.printToConsole("\nTOPPINGS 🍗🌶️🧀🍅");
+                UserInterface.printToConsole("\n⦿ BREAD SIZES:\n", Colors.GOLD);
+
+                SandwichSize.getAllSizes();
+
+                int sizeChoice = UserInterface.promptForNumber("\nSANDWICH SIZE ❯ ");
+
+                sandwichSize = Arrays.stream(SandwichSize.values())
+                        .filter(size -> size.getDisplaySize() == sizeChoice).findFirst().orElse(null);
+
+                break;
+            } catch (Exception e) {
+                UserInterface.invalidOption();
+            }
+        }
+
+        UserInterface.printToConsole("\n⦿ TOPPINGS:", Colors.GOLD);
 
         List<Topping<SandwichToppings>> toppings = new ArrayList<>();
 
         for(ToppingCategory category : ToppingCategory.values()) {
 
             while(true) {
+                UserInterface.printDivider();
                 SandwichToppings.displayToppings(category);
 
                 // Give users the option to enter no if they don't want to add any toppings
@@ -79,11 +83,13 @@ public class Deli {
             }
         }
 
-        boolean isToasted = UserInterface.promptForInput("Do you want your sandwich toasted ❯ ").equalsIgnoreCase("yes");
+        boolean isToasted = UserInterface.promptForInput("\nDo you want your sandwich toasted ❯ ").equalsIgnoreCase("yes");
 
         Sandwich sandwich = new Sandwich(breadChoice, sandwichSize, isToasted);
 
         toppings.forEach(sandwich::addTopping);
+
+        UserInterface.printToConsole("\nSANDWICH ADDED TO ORDER ✅", Colors.GREEN);
 
         return sandwich;
     }
@@ -101,6 +107,8 @@ public class Deli {
 
         DrinkSize drinkSize = DrinkSize.valueOf(UserInterface.promptForInput("Select size ❯ ").toUpperCase());
 
+        UserInterface.printToConsole("\nDRINK ADDED TO ORDER ✅", Colors.GREEN);
+
         return new Drink(flavor, drinkSize);
     }
 
@@ -110,6 +118,8 @@ public class Deli {
         UserInterface.printToConsole(ChipFlavors.displayFlavors());
 
         ChipFlavors chips = ChipFlavors.valueOf(UserInterface.promptForInput("Select flavor ❯ ").toUpperCase());
+
+        UserInterface.printToConsole("\nCHIPS ADDED TO ORDER ✅", Colors.GREEN);
 
         return new Chips(chips);
     }
