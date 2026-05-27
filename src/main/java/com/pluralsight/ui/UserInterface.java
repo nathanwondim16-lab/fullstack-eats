@@ -30,8 +30,8 @@ public class UserInterface {
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public static void printDivider(String symbol) {
-        printToConsole("\n" + symbol.repeat(100), Colors.TRON);
+    public static void printDivider() {
+        printToConsole("\n" + "=".repeat(100), Colors.TRON);
     }
 
     public static void invalidOption() {
@@ -41,5 +41,13 @@ public class UserInterface {
     public static void endApplication(String message) {
         printToConsole("\n\n" + message);
         System.exit(0);
+    }
+
+    public static void printToConsoleFormatted(String text, Object... values) {
+        System.out.printf(text, values);
+    }
+
+    public static void printToConsoleFormatted(String text, Colors colors, Object... values) {
+        System.out.printf(colors.colorize(text), values);
     }
 }

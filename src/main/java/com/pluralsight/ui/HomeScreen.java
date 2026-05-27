@@ -7,7 +7,7 @@ public class HomeScreen {
         UserInterface.printToConsole("Welcome to Crafted Bites", Colors.GOLD);
 
         while(true) {
-            UserInterface.printDivider("=");
+            UserInterface.printDivider();
 
             int userChoice = UserInterface.promptForNumber("""
                     1) New Order

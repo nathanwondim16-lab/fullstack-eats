@@ -14,7 +14,7 @@ public class OrderScreen {
         Order order = new Order(LocalDate.now());
 
         while (true) {
-            UserInterface.printDivider("=");
+            UserInterface.printDivider();
             int userChoice = UserInterface.promptForNumber("""
                     1) Add Sandwich
                     2) Add Drink
@@ -27,7 +27,7 @@ public class OrderScreen {
                 case 1 -> order.addItemToOrder(Deli.orderSandwich());
                 case 2 -> order.addItemToOrder(Deli.orderDrink());
                 case 3 -> order.addItemToOrder(Deli.orderChips());
-                //case 4 -> Checkout goes here
+                case 4 -> order.displayOrderDetails();
                 case 0 -> {
                     UserInterface.printToConsole("\nORDER CANCELED ❌", Colors.CRIMSON);
                     return;

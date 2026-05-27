@@ -25,4 +25,9 @@ public class Taco extends Food<TacoToppings> {
     public double getPrice() {
         return 0;
     }
+
+    @Override
+    public void orderDetails() {
+
+    }
 }

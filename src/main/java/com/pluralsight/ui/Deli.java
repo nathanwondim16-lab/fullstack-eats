@@ -13,7 +13,7 @@ public class Deli {
 
     public static Sandwich orderSandwich() {
 
-        UserInterface.printDivider("=");
+        UserInterface.printDivider();
 
         UserInterface.printToConsole("""
                   ________________________
@@ -55,9 +55,6 @@ public class Deli {
 
         for(ToppingCategory category : ToppingCategory.values()) {
 
-
-            //UserInterface.printToConsole("■\t" + category.getName() + ":");
-
             while(true) {
                 SandwichToppings.displayToppings(category);
 
@@ -69,7 +66,7 @@ public class Deli {
                 }
 
                 // Asks user if they want extra of X topping.
-                boolean isExtra = UserInterface.promptForInput("Do you want extra on your sandwich? ").equalsIgnoreCase("yes");
+                boolean isExtra = UserInterface.promptForInput("Do you want extra " + toppingChoice + " on your sandwich? ").equalsIgnoreCase("yes");
 
                 String finished = UserInterface.promptForInput("Are you done adding " + (category + "s to your sandwich ❯ ").toLowerCase());
 
@@ -88,22 +85,6 @@ public class Deli {
 
         toppings.forEach(sandwich::addTopping);
 
-        UserInterface.printToConsole("HERE ARE YOU SANDWICH DETAILS: \n");
-
-        UserInterface.printToConsole(String.format("""
-                Bread: %s
-                Sandwich size: %s
-                
-                Toppings: %s
-                
-                Total: $%.2f
-                """,
-                sandwich.getBreadType(),
-                sandwich.getSandwichSize().getDisplaySize(),
-                sandwich.getToppings().toString(),
-                sandwich.getPrice())
-        );
-
         return sandwich;
     }
 
@@ -118,7 +99,7 @@ public class Deli {
 
         UserInterface.printToConsole(DrinkSize.displayDrinkSizes());
 
-        DrinkSize drinkSize = DrinkSize.valueOf(UserInterface.promptForInput("Select size ❯").toUpperCase());
+        DrinkSize drinkSize = DrinkSize.valueOf(UserInterface.promptForInput("Select size ❯ ").toUpperCase());
 
         return new Drink(flavor, drinkSize);
     }
