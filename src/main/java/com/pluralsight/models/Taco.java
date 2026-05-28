@@ -1,20 +1,28 @@
 package com.pluralsight.models;
 
+import com.pluralsight.enums.ShellType;
 import com.pluralsight.enums.TacoChoices;
 import com.pluralsight.enums.TacoToppings;
+import com.pluralsight.ui.UserInterface;
 
 public class Taco extends Food<TacoToppings> {
 
-    private final TacoChoices tacoChoices;
+    private final ShellType shellType;
+    private final TacoChoices tacoChoice;
     private final boolean isCoveredInSalasAndQueso;
 
-    public Taco(TacoChoices tacoChoices, boolean isCoveredInSalasAndQueso) {
-        this.tacoChoices = tacoChoices;
+    public Taco(ShellType shellType, TacoChoices tacoChoice, boolean isCoveredInSalasAndQueso) {
+        this.shellType = shellType;
+        this.tacoChoice = tacoChoice;
         this.isCoveredInSalasAndQueso = isCoveredInSalasAndQueso;
     }
 
-    public TacoChoices getTacoChoices() {
-        return tacoChoices;
+    public ShellType getShellType() {
+        return shellType;
+    }
+
+    public TacoChoices getTacoChoice() {
+        return tacoChoice;
     }
 
     public boolean isCoveredInSalasAndQueso() {
@@ -23,12 +31,24 @@ public class Taco extends Food<TacoToppings> {
 
     @Override
     public double getPrice() {
-        return 0;
+        return tacoChoice.getTacoChoicePrice()
+                + getToppings().stream()
+                .mapToDouble(tacoChoice::getToppingPrice)
+                .sum();
     }
 
     @Override
     public void orderDetails() {
+        UserInterface.printToConsoleFormatted("""
+                ◦ Custom %s
+                \t\t• %s
+                """, tacoChoice, shellType);
 
+        displayToppings();
+
+        UserInterface.printToConsoleFormatted("""
+                \t\t• %s\n
+                """, isCoveredInSalasAndQueso ? "Covered in salsa and queso" : "");
     }
 
     @Override

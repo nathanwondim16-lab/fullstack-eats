@@ -1,15 +1,23 @@
 package com.pluralsight.models;
 
+import com.pluralsight.enums.CrustType;
 import com.pluralsight.enums.PizzaSize;
 import com.pluralsight.enums.PizzaToppings;
+import com.pluralsight.ui.UserInterface;
 
 public class Pizza extends Food<PizzaToppings> {
+    private final CrustType crustType;
     private final PizzaSize pizzaSize;
     private final boolean isCrustStuffed;
 
-    public Pizza(PizzaSize pizzaSize, boolean isCrustStuffed) {
+    public Pizza(CrustType crustType, PizzaSize pizzaSize, boolean isCrustStuffed) {
+        this.crustType = crustType;
         this.pizzaSize = pizzaSize;
         this.isCrustStuffed = isCrustStuffed;
+    }
+
+    public CrustType getCrustType() {
+        return crustType;
     }
 
     public PizzaSize getPizzaSize() {
@@ -22,12 +30,24 @@ public class Pizza extends Food<PizzaToppings> {
 
     @Override
     public double getPrice() {
-        return 0;
+        return pizzaSize.getPizzaSizePrice()
+                + getToppings().stream()
+                .mapToDouble(pizzaSize::getToppingPrice)
+                .sum();
     }
 
     @Override
     public void orderDetails() {
+        UserInterface.printToConsoleFormatted("""
+                ◦ Custom Pizza
+                \t\t• %s" %s crust
+                """, pizzaSize.getDisplaySize(), crustType);
 
+        displayToppings();
+
+        UserInterface.printToConsoleFormatted("""
+                \t\t• %s\n
+                """, isCrustStuffed ? "Stuffed Crust" : "");
     }
 
     @Override

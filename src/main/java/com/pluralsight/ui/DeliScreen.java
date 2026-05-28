@@ -2,12 +2,9 @@ package com.pluralsight.ui;
 
 import com.pluralsight.enums.*;
 import com.pluralsight.models.*;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-public class Deli {
+public class DeliScreen {
 
     public static Sandwich orderSandwich() {
 
@@ -86,7 +83,8 @@ public class Deli {
     private static void addToppingsByCategory(Sandwich sandwich, ToppingCategory category) {
         while(true) {
             UserInterface.printDivider();
-            SandwichToppings.displayToppings(category);
+
+            ToppingFormatter.displayToppings(SandwichToppings.class, category);
 
             String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
 

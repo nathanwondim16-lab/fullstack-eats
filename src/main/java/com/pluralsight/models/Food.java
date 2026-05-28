@@ -1,13 +1,15 @@
 package com.pluralsight.models;
 
 import com.pluralsight.enums.Colors;
+import com.pluralsight.enums.ToppingCategory;
 import com.pluralsight.interfaces.Chargeable;
+import com.pluralsight.interfaces.OrganizeToppings;
 import com.pluralsight.ui.UserInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class Food<T extends Enum<T>> implements Chargeable {
+public abstract class Food<T extends Enum<T> & OrganizeToppings> implements Chargeable {
     private final List<Topping<T>> toppings;
 
     public Food() {
@@ -42,10 +44,9 @@ public abstract class Food<T extends Enum<T>> implements Chargeable {
         while(true) {
             UserInterface.printToConsole("\nCURRENT TOPPINGS", Colors.GOLD);
             displayToppings();
-
+            UserInterface.printToConsole("What do you want to do?", Colors.GOLD);
             int choice = UserInterface.promptForNumber("""
-                    
-                    What do you want to do?
+                   
                     
                     1) Add Topping
                     2) Remove Topping
@@ -59,7 +60,7 @@ public abstract class Food<T extends Enum<T>> implements Chargeable {
                 case 2 -> removeToppingFromItem(toppingEnum);
                 case 3 -> changeItemExtraStatus(toppingEnum);
                 case 0 -> {
-                    UserInterface.printToConsole("\nTOPPING CHANGES HAVE BEEN SAVED ✅\n", Colors.GREEN);
+                    UserInterface.printToConsole("\nTOPPING CHANGES HAVE BEEN SAVED ✅", Colors.GREEN);
                     return;
                 }
 
@@ -77,7 +78,7 @@ public abstract class Food<T extends Enum<T>> implements Chargeable {
 
         addTopping(new Topping<>(toppingType, isExtra));
 
-        UserInterface.printToConsole("\nTOPPING HAS BEEN ADDED ✅\n", Colors.GREEN);
+        UserInterface.printToConsole("\nTOPPING HAS BEEN ADDED ✅", Colors.GREEN);
     }
 
     private void removeToppingFromItem(Class<T> toppingEnum) {
@@ -91,7 +92,7 @@ public abstract class Food<T extends Enum<T>> implements Chargeable {
 
         removeTopping(toppingToRemove);
 
-        UserInterface.printToConsole("\nTOPPING HAS BEEN REMOVED ❌\n", Colors.GREEN);
+        UserInterface.printToConsole("\nTOPPING HAS BEEN REMOVED ❌", Colors.GREEN);
     }
 
     private void changeItemExtraStatus(Class<T> toppingEnum) {
@@ -106,7 +107,7 @@ public abstract class Food<T extends Enum<T>> implements Chargeable {
 
         topping.setExtra();
 
-        UserInterface.printToConsole("\nEXTRA OPTION UPDATED ✅\n", Colors.GREEN);
+        UserInterface.printToConsole("\nEXTRA OPTION UPDATED ✅", Colors.GREEN);
     }
 
     private Topping<T> findTopping(T toppingType) {
@@ -123,8 +124,12 @@ public abstract class Food<T extends Enum<T>> implements Chargeable {
     private void displayAvailableToppings(Class<T> toppingEnum) {
         UserInterface.printToConsole("\nAVAILABLE TOPPINGS", Colors.GOLD);
 
-        Arrays.stream(toppingEnum.getEnumConstants())
-                .forEach(t -> UserInterface.printToConsole("• " + t.name()));
+        for(ToppingCategory category : ToppingCategory.values()) {
+            ToppingFormatter.displayToppings(toppingEnum, category);
+        }
+
+//        Arrays.stream(toppingEnum.getEnumConstants())
+//                .forEach(t -> UserInterface.printToConsole("• " + t.name()));
     }
 
     public List<Topping<T>> getToppings() {

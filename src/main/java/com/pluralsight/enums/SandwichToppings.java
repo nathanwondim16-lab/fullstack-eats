@@ -1,11 +1,8 @@
 package com.pluralsight.enums;
 
-import com.pluralsight.ui.UserInterface;
+import com.pluralsight.interfaces.OrganizeToppings;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
-public enum SandwichToppings {
+public enum SandwichToppings implements OrganizeToppings {
 
     /*
     PREMIUM
@@ -31,23 +28,27 @@ public enum SandwichToppings {
 
                          Other toppings
      */
-    LETTUCE(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    PEPPERS(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    ONIONS(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    TOMATOES(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    JALAPENOS(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    CUCUMBERS(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    PICKLES(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    GUACAMOLE(ToppingCategory.OTHER, ToppingTier.REGULAR),
-    MUSHROOMS(ToppingCategory.OTHER, ToppingTier.REGULAR),
+    LETTUCE(ToppingCategory.REGULAR, ToppingTier.INCLUDED),
+    PEPPERS(ToppingCategory.REGULAR, ToppingTier.INCLUDED),
+    ONIONS(ToppingCategory.REGULAR, ToppingTier.INCLUDED),
+    TOMATOES(ToppingCategory.REGULAR, ToppingTier.INCLUDED),
+    JALAPENOS(ToppingCategory.REGULAR, ToppingTier.INCLUDED),
+    CUCUMBERS(ToppingCategory.REGULAR, ToppingTier.INCLUDED),
+    PICKLES(ToppingCategory.REGULAR, ToppingTier.INCLUDED),
+    GUACAMOLE(ToppingCategory.REGULAR, ToppingTier.INCLUDED),
+    MUSHROOMS(ToppingCategory.REGULAR, ToppingTier.INCLUDED),
 
     //                       Sauces
-    MAYO(ToppingCategory.SAUCE, ToppingTier.REGULAR),
-    MUSTARD(ToppingCategory.SAUCE, ToppingTier.REGULAR),
-    KETCHUP(ToppingCategory.SAUCE, ToppingTier.REGULAR),
-    RANCH(ToppingCategory.SAUCE, ToppingTier.REGULAR),
-    THOUSAND_ISLANDS(ToppingCategory.SAUCE, ToppingTier.REGULAR),
-    VINAIGRETTE(ToppingCategory.SAUCE, ToppingTier.REGULAR);
+    MAYO(ToppingCategory.SAUCE, ToppingTier.INCLUDED),
+    MUSTARD(ToppingCategory.SAUCE, ToppingTier.INCLUDED),
+    KETCHUP(ToppingCategory.SAUCE, ToppingTier.INCLUDED),
+    RANCH(ToppingCategory.SAUCE, ToppingTier.INCLUDED),
+    THOUSAND_ISLANDS(ToppingCategory.SAUCE, ToppingTier.INCLUDED),
+    VINAIGRETTE(ToppingCategory.SAUCE, ToppingTier.INCLUDED),
+
+    //                       Sides
+    FRIES(ToppingCategory.SIDE, ToppingTier.INCLUDED),
+    SALAD(ToppingCategory.SIDE, ToppingTier.INCLUDED);
 
 
     private final ToppingCategory category;
@@ -58,89 +59,13 @@ public enum SandwichToppings {
         this.tier = tier;
     }
 
+    @Override
     public ToppingCategory getCategory() {
         return category;
     }
 
+    @Override
     public ToppingTier getTier() {
         return tier;
-    }
-
-    public static String getAllToppings() {
-        return Arrays.stream(SandwichToppings.values()).map(Enum::toString).collect(Collectors.joining(", "));
-    }
-
-    public static void displayToppings(ToppingCategory category) {
-        int width = Arrays.stream(SandwichToppings.values())
-                .filter(topping -> topping.getCategory() == category)
-                .map(Enum::toString)
-                .mapToInt(String::length)
-                .max()
-                .orElse(category.toString().length());
-
-        String tableTitle = category + "S";
-        width = Math.max(width, tableTitle.length());
-
-        createTable(width, tableTitle);
-
-        int finalWidth = width;
-
-        Arrays.stream(SandwichToppings.values())
-                .filter(topping -> topping.getCategory() == category)
-                .forEach(topping -> {
-                    String row = String.format("║ %-" + finalWidth + "s ║", topping);
-                    UserInterface.printToConsole(row, Colors.LIGHT_BLUE);
-                });
-
-        String bottomBox = "╚" + repeat("═", width + 2) + "╝";
-        UserInterface.printToConsole(bottomBox, Colors.LIGHT_BLUE);
-    }
-
-//    public static void displayToppingsByCategory() {
-//
-//        for(ToppingCategory category : ToppingCategory.values()) {
-//
-//            int width = Arrays.stream(SandwichToppings.values())
-//                    .filter(topping -> topping.getCategory() == category)
-//                    .map(Enum::toString)
-//                    .mapToInt(String::length)
-//                    .max()
-//                    .orElse(category.toString().length());
-//
-//            String tableTitle = category + "S";
-//            width = Math.max(width, tableTitle.length());
-//
-//            createTable(width, tableTitle);
-//
-//            int finalWidth = width;
-//
-//            Arrays.stream(SandwichToppings.values())
-//                    .filter(topping -> topping.getCategory() == category)
-//                    .forEach(topping -> {
-//                        String row = String.format("║ %-" + finalWidth + "s ║", topping);
-//                        UserInterface.printToConsole(row, Colors.LIGHT_BLUE);
-//                    });
-//
-//            String bottomBox = "╚" + repeat("═", width + 2) + "╝";
-//            UserInterface.printToConsole(bottomBox, Colors.LIGHT_BLUE);
-//
-//        }
-//    }
-
-    private static void createTable(int width, String tableName) {
-        String topBox = "╔" + repeat("═", width + 2) + "╗";
-
-        String middleBox = "╠" + repeat("═", width + 2) + "╣";
-
-        String headerFormat = "║ %-" + width + "s ║";
-
-        UserInterface.printToConsole(topBox, Colors.LIGHT_BLUE);
-        UserInterface.printToConsole(String.format(headerFormat, tableName), Colors.LIGHT_BLUE);
-        UserInterface.printToConsole(middleBox, Colors.LIGHT_BLUE);
-
-    }
-
-    private static String repeat(String text, int boxAmount) {
-        return text.repeat(boxAmount);
     }
 }

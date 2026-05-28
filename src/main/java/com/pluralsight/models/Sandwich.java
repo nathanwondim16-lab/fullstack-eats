@@ -42,9 +42,8 @@ public class Sandwich extends Food<SandwichToppings> {
     @Override
     public void editItem() {
         while(true) {
+            UserInterface.printToConsole("WHAT DO YOU WANT TO CHANGE ABOUT YOUR SANDWICH?\n", Colors.GOLD);
             int option = UserInterface.promptForNumber("""
-                    
-                    WHAT DO YOU WANT TO CHANGE ABOUT YOUR SANDWICH?
                     
                     1) Size
                     2) Bread
@@ -60,7 +59,8 @@ public class Sandwich extends Food<SandwichToppings> {
                 case 3 -> editToppings(SandwichToppings.class);
                 case 4 -> changeToastedStatus();
                 case 0 -> {
-                    UserInterface.printToConsole("\nCHANGES TO YOUR SANDWICH HAVE BEEN SAVED ✅\n", Colors.GREEN);
+                    UserInterface.printToConsole("\nCHANGES TO YOUR SANDWICH HAVE BEEN SAVED ✅", Colors.GREEN);
+                    return;
                 }
 
                 default -> UserInterface.invalidOption();
@@ -87,7 +87,7 @@ public class Sandwich extends Food<SandwichToppings> {
 
         sandwichSize = selectedSize;
 
-        UserInterface.printToConsole("\nSIZE HAS BEEN CHANGED ✅\n", Colors.GREEN);
+        UserInterface.printToConsole("\nSIZE HAS BEEN CHANGED ✅", Colors.GREEN);
     }
 
     private void changeBread() {
@@ -98,7 +98,7 @@ public class Sandwich extends Food<SandwichToppings> {
         try {
             breadType = BreadType.valueOf(UserInterface.promptForInput("\n SELECT BREAD ❯ ").toUpperCase());
 
-            UserInterface.printToConsole("\nBREAD HAS BEEN CHANGED ✅\n", Colors.GREEN);
+            UserInterface.printToConsole("\nBREAD HAS BEEN CHANGED ✅", Colors.GREEN);
         } catch (Exception e) {
             UserInterface.invalidOption();
         }
@@ -121,6 +121,6 @@ public class Sandwich extends Food<SandwichToppings> {
 
         UserInterface.printToConsoleFormatted("""
                 \t\t• %s\n
-                """, isToasted ? "Toasted" : "Not toasted");
+                """, isToasted ? "Sandwich: Toasted" : "");
     }
 }

@@ -3,8 +3,9 @@ package com.pluralsight.enums;
 public enum ToppingCategory {
     MEAT("Meat"),
     CHEESE("Cheese"),
-    SAUCE("Sauces"),
-    OTHER("Other toppings");
+    SAUCE("Sauce"),
+    REGULAR("Regular Topping"),
+    SIDE("Side");
 
     private final String name;
 
