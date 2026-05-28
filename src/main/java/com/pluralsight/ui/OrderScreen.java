@@ -1,6 +1,7 @@
 package com.pluralsight.ui;
 
 import com.pluralsight.enums.Colors;
+import com.pluralsight.exceptions.InvalidMenuSelectionException;
 import com.pluralsight.io.ReceiptsFileManager;
 import com.pluralsight.models.Order;
 import com.pluralsight.services.OrderService;
@@ -8,30 +9,29 @@ import com.pluralsight.services.OrderService;
 import java.time.LocalDate;
 
 public class OrderScreen {
+    private static final OrderService orderService = new OrderService();
+    private static final ReceiptsFileManager receiptsFileManager = new ReceiptsFileManager();
 
     public static void startOrder() {
-
         Order order = new Order(LocalDate.now());
-        OrderService orderService = new OrderService();
-        ReceiptsFileManager receiptsFileManager = new ReceiptsFileManager();
 
         while (true) {
             UserInterface.printDivider();
 
             int userChoice = UserInterface.promptForNumber("""
-                    1) Add Sandwich
-                    2) Add Drink
-                    3) Add Chips
-                    4) Add Pizza
-                    5) Add Garlic Knots
-                    6) Add Taco
-                    7) Add Chips & Salsa
-                    8) Checkout
-                    9) Edit Order
-                    10) Remove Item From Order
-                    0) Cancel Order
-                    
-                    Select Option ❯\s""");
+                        1) Add Sandwich
+                        2) Add Drink
+                        3) Add Chips
+                        4) Add Pizza
+                        5) Add Garlic Knots
+                        6) Add Taco
+                        7) Add Chips & Salsa
+                        8) Checkout
+                        9) Edit Order
+                        10) Remove Item From Order
+                        0) Cancel Order
+                        
+                        Select Option ❯\s""");
 
             switch (userChoice) {
                 case 1 -> order.addItemToOrder(DeliScreen.orderSandwich());
@@ -41,58 +41,13 @@ public class OrderScreen {
                 case 5 -> order.addItemToOrder(PizzeriaScreen.orderKnots());
                 //case 6 -> order.addItemToOrder(); // Add Taco
                 //case 7 -> order.addItemToOrder(); // Add Chips & Salsa
-
                 case 8 -> {
-                    try {
-                        order.validateOrder();
-
-                        orderService.displayOrderDetails(order);
-
-                        int confirmOrCancel = UserInterface.promptForNumber("""
-                            1) Confirm Order
-                            2) Cancel Order
-                            
-                            Select Option ❯\s""");
-                        switch(confirmOrCancel) {
-                            case 1 -> {
-                                receiptsFileManager.save(order);
-                                UserInterface.confirmOrder();
-                                return;
-                            }
-                            case 2 -> {
-                                order.cancelOrder();
-                                UserInterface.printToConsole("\nORDER CANCELED ❌", Colors.GREEN);
-                                return;
-                            }
-
-                            default -> UserInterface.invalidOption();
-                        }
-                    } catch (RuntimeException e) {
-                        UserInterface.handleException(e);
+                    if(handleCheckout(order)) {
+                        return;
                     }
                 }
-
-                case 9 -> {
-                    try {
-                        order.validateOrder();
-                        orderService.editOrder(order);
-                    } catch (RuntimeException e) {
-                        UserInterface.handleException(e);
-                    }
-                }
-
-                case 10 -> {
-                    try {
-                        order.validateOrder();
-
-                        int itemID = UserInterface.promptForNumber("Enter the ID number of the item you wish to remove ❯ ");
-
-                        orderService.removeItemFromOrder(order, itemID);
-                    } catch (RuntimeException e) {
-                        UserInterface.handleException(e);
-                    }
-                }
-
+                case 9 -> handleEditOrder(order);
+                case 10 -> handleRemoveItem(order);
                 case 0 -> {
                     order.cancelOrder();
                     UserInterface.printToConsole("\nORDER CANCELED ❌", Colors.GREEN);
@@ -101,6 +56,61 @@ public class OrderScreen {
 
                 default -> UserInterface.invalidOption();
             }
+        }
+    }
+
+    private static boolean handleCheckout(Order order) {
+        try {
+            order.validateOrder();
+
+            orderService.displayOrderDetails(order);
+
+            int confirmOrCancel = UserInterface.promptForNumber("""
+                                    1) Confirm Order
+                                    2) Cancel Order
+                                    
+                                    Select Option ❯\s""");
+            switch (confirmOrCancel) {
+                case 1 -> {
+                    receiptsFileManager.save(order);
+                    UserInterface.confirmOrder();
+                    return true;
+                }
+                case 2 -> {
+                    order.cancelOrder();
+                    UserInterface.printToConsole("\nORDER CANCELED ❌", Colors.GREEN);
+                    return true;
+                }
+
+                default -> {
+                    UserInterface.invalidOption();
+                    return false;
+                }
+            }
+        } catch (RuntimeException e) {
+            UserInterface.handleException(e);
+            return false;
+        }
+    }
+
+    private static void handleEditOrder(Order order) {
+        try {
+            order.validateOrder();
+            orderService.editOrder(order);
+        } catch(RuntimeException e) {
+            UserInterface.handleException(e);
+        }
+    }
+
+    private static void handleRemoveItem(Order order) {
+        try {
+            order.validateOrder();
+
+            int itemID = UserInterface.promptForNumber("Enter the ID number of the item you wish to remove ❯ ");
+
+            orderService.removeItemFromOrder(order, itemID);
+        } catch (RuntimeException e) {
+            UserInterface.handleException(e);
         }
     }
 }
