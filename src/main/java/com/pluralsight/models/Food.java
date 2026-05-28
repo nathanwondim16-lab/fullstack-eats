@@ -124,15 +124,12 @@ public abstract class Food<T extends Enum<T> & OrganizeToppings> implements Char
     private void displayAvailableToppings(Class<T> toppingEnum) {
         UserInterface.printToConsole("\nAVAILABLE TOPPINGS", Colors.GOLD);
 
-        for(ToppingCategory category : ToppingCategory.values()) {
-            ToppingFormatter.displayToppings(toppingEnum, category);
-        }
-
-//        Arrays.stream(toppingEnum.getEnumConstants())
-//                .forEach(t -> UserInterface.printToConsole("• " + t.name()));
+        Arrays.stream(ToppingCategory.values()).forEach(category -> ToppingFormatter.displayToppings(toppingEnum, category));
     }
 
     public List<Topping<T>> getToppings() {
         return toppings;
     }
+
+    public abstract String preparingMessage();
 }

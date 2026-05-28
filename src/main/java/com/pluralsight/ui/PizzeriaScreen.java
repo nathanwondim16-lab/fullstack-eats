@@ -70,18 +70,23 @@ public class PizzeriaScreen {
             UserInterface.printToConsole("\n⦿ PIZZA SIZES:\n", Colors.GOLD);
             PizzaSize.getAllSizes();
 
-            int sizeChoice = UserInterface.promptForNumber("\nPIZZA SIZE ❯ ");
+            try {
+                int sizeChoice = Integer.parseInt(UserInterface.promptForInput("\nPIZZA SIZE ❯ "));
 
-            PizzaSize selectedSize = Arrays.stream(PizzaSize.values())
-                    .filter(size -> size.getDisplaySize() == sizeChoice)
-                    .findFirst()
-                    .orElse(null);
+                PizzaSize selectedSize = Arrays.stream(PizzaSize.values())
+                        .filter(size -> size.getDisplaySize() == sizeChoice)
+                        .findFirst()
+                        .orElse(null);
 
-            if(selectedSize != null) {
-                return selectedSize;
+                if(selectedSize != null) {
+                    return selectedSize;
+                }
+
+                UserInterface.invalidOption();
+
+            } catch (Exception e) {
+                UserInterface.invalidOption();
             }
-
-            UserInterface.invalidOption();
         }
     }
 
@@ -124,24 +129,6 @@ public class PizzeriaScreen {
                 UserInterface.invalidOption();
             }
         }
-    }
-
-    public static Drink orderDrink() {
-        UserInterface.printToConsole("\nCHOOSE A DRINK BELOW");
-
-        UserInterface.printToConsole(DrinkFlavors.displayFlavors());
-
-        DrinkFlavors flavor = DrinkFlavors.valueOf(UserInterface.promptForInput("Select flavor ❯ ").toUpperCase());
-
-        UserInterface.printToConsole("\nCHOOSE A SIZE");
-
-        UserInterface.printToConsole(DrinkSize.displayDrinkSizes());
-
-        DrinkSize drinkSize = DrinkSize.valueOf(UserInterface.promptForInput("Select size ❯ ").toUpperCase());
-
-        UserInterface.printToConsole("\n" + drinkSize + " " + flavor + " ADDED TO ORDER ✅", Colors.GREEN);
-
-        return new Drink(flavor, drinkSize);
     }
 
     public static GarlicKnots orderKnots() {

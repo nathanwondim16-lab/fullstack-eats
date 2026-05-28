@@ -120,7 +120,12 @@ public class Sandwich extends Food<SandwichToppings> {
         displayToppings();
 
         UserInterface.printToConsoleFormatted("""
-                \t\t• %s\n
-                """, isToasted ? "Sandwich: Toasted" : "");
+                \t\t%s
+                """, isToasted ? "• Toasted" : "");
+    }
+
+    @Override
+    public String preparingMessage() {
+        return "🥪Making Sandwich";
     }
 }

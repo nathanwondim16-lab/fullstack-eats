@@ -3,7 +3,6 @@ package com.pluralsight.ui;
 import com.pluralsight.enums.Colors;
 import com.pluralsight.io.ReceiptsFileManager;
 import com.pluralsight.models.Order;
-
 import java.time.LocalDate;
 
 public class OrderScreen {
@@ -47,6 +46,7 @@ public class OrderScreen {
                     switch(confirmOrCancel) {
                         case 1 -> {
                             receiptsFileManager.save(order);
+                            UserInterface.confirmOrder();
                             return;
                         }
                         case 2 -> {

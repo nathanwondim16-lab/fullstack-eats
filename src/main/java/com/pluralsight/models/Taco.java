@@ -47,12 +47,17 @@ public class Taco extends Food<TacoToppings> {
         displayToppings();
 
         UserInterface.printToConsoleFormatted("""
-                \t\t• %s\n
-                """, isCoveredInSalasAndQueso ? "Covered in salsa and queso" : "");
+                \t\t%s
+                """, isCoveredInSalasAndQueso ? "• Covered in Salsa and Queso" : "");
     }
 
     @Override
     public void editItem() {
 
+    }
+
+    @Override
+    public String preparingMessage() {
+        return "🌮Preparing Tacos";
     }
 }

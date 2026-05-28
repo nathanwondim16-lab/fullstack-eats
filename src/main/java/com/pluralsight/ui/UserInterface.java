@@ -2,6 +2,7 @@ package com.pluralsight.ui;
 
 import com.pluralsight.enums.Colors;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -49,5 +50,50 @@ public class UserInterface {
 
     public static void printToConsoleFormatted(String text, Colors colors, Object... values) {
         System.out.printf(colors.colorize(text), values);
+    }
+
+    public static void confirmOrder() {
+        UserInterface.printDivider();
+        String[] confirmationMessage = {
+                "[ SYSTEM ] Creating Customer Ticket...",
+                "[ SYSTEM ] Syncing Order Database...",
+                "[ SYSTEM ] Reserving Inventory...",
+                "[ SYSTEM ] Sending Order To Kitchen...",
+                "[ SYSTEM ] Printing Receipt..."
+        };
+
+        Arrays.stream(confirmationMessage).forEach(message -> {
+            UserInterface.printOnSameLine(Colors.LIGHT_BLUE.colorize("\r" + message));
+            pauseProgram(1000);
+        });
+
+        UserInterface.printToConsole("\r ");
+
+        int totalBars = 20;
+
+        String filledBar = Colors.GREEN.colorize("█");
+        String transparentBar = Colors.MUTED_GRAY.colorize("▓");
+        for (int i = 0; i <= totalBars; i++) {
+            String progressBar = filledBar.repeat(i) + transparentBar.repeat(totalBars - i);
+
+            int percent = i * 100 / totalBars;
+
+            UserInterface.printOnSameLine(Colors.GREEN.colorize("\rSaving Order Details: " + progressBar + " " + percent + "%"));
+
+            pauseProgram(150);
+        }
+
+        UserInterface.printToConsole("\r ");
+
+
+        UserInterface.printToConsole("[ COMPLETE ] ORDER SAVED ✅\n", Colors.GREEN);
+    }
+
+    private static void pauseProgram(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            System.out.println("Something went wrong " + e.getMessage());
+        }
     }
 }

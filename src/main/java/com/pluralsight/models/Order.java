@@ -62,7 +62,7 @@ public class Order {
 
     public void cancelOrder() {
         order.clear();
-        orderID = 0;
+        orderID--;
     }
 
     public void editOrder() {

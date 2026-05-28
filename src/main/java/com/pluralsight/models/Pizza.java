@@ -46,12 +46,17 @@ public class Pizza extends Food<PizzaToppings> {
         displayToppings();
 
         UserInterface.printToConsoleFormatted("""
-                \t\t• %s\n
-                """, isCrustStuffed ? "Stuffed Crust" : "");
+                \t\t%s
+                """, isCrustStuffed ? "• Stuffed Crust" : "");
     }
 
     @Override
     public void editItem() {
 
+    }
+
+    @Override
+    public String preparingMessage() {
+        return "🍕Baking Pizza";
     }
 }
