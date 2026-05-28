@@ -60,6 +60,8 @@ public enum TacoChoices {
     }
 
     public static void getAllChoices() {
-        Arrays.stream(TacoChoices.values()).map(TacoChoices::getDisplayName).forEach(size -> System.out.println("◆ " + size + "\""));
+        Arrays.stream(TacoChoices.values())
+                .map(TacoChoices::getDisplayName)
+                .forEach(size -> System.out.println("◆ " + size));
     }
 }

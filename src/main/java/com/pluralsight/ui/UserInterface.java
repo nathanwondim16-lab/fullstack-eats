@@ -1,6 +1,7 @@
 package com.pluralsight.ui;
 
 import com.pluralsight.enums.Colors;
+import com.pluralsight.exceptions.InvalidMenuSelectionException;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -27,8 +28,14 @@ public class UserInterface {
     }
 
     public static int promptForNumber(String message) {
-        printOnSameLine(message);
-        return Integer.parseInt(scanner.nextLine());
+        while(true) {
+            try {
+                printOnSameLine(message);
+                return Integer.parseInt(scanner.nextLine().strip());
+            } catch (NumberFormatException e) {
+                handleException(new InvalidMenuSelectionException("Please enter a valid number"));
+            }
+        }
     }
 
     public static void printDivider() {
@@ -36,6 +43,7 @@ public class UserInterface {
     }
 
     public static void invalidOption() {
+        printDivider();
         printToConsole("\nINVALID OPTION. PLEASE CHOOSE A VALID OPTION", Colors.CRIMSON);
     }
 
@@ -101,7 +109,7 @@ public class UserInterface {
     public static void handleException(Throwable throwable) {
         printDivider();
 
-        printToConsole("ERROR ❌ " + throwable.getMessage(), Colors.CRIMSON);
+        printToConsole("\nERROR ❌ ----> " + throwable.getMessage().toUpperCase(), Colors.CRIMSON);
 
         printDivider();
     }

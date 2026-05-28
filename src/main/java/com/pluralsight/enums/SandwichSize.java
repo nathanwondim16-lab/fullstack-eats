@@ -62,6 +62,8 @@ public enum SandwichSize {
     }
 
     public static void getAllSizes() {
-        Arrays.stream(SandwichSize.values()).map(SandwichSize::getDisplaySize).forEach(size -> System.out.println("◆ " + size + "\""));
+        Arrays.stream(SandwichSize.values())
+                .map(SandwichSize::getDisplaySize)
+                .forEach(size -> System.out.println("◆ " + size + "\""));
     }
 }

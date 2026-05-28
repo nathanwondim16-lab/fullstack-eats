@@ -1,7 +1,6 @@
 package com.pluralsight.enums;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public enum DrinkSize {
     SMALL(2),
@@ -18,7 +17,9 @@ public enum DrinkSize {
         return price;
     }
 
-    public static String displayDrinkSizes() {
-        return Arrays.stream(DrinkSize.values()).map(Enum::toString).collect(Collectors.joining(", "));
+    public static void displayDrinkSizes() {
+        Arrays.stream(DrinkSize.values())
+                .map(Enum::toString)
+                .forEach(size -> System.out.println("◆ " + size));
     }
 }

@@ -4,9 +4,18 @@ import com.pluralsight.enums.Colors;
 
 public class HomeScreen {
     public void start() {
-        UserInterface.printToConsole("Welcome to Crafted Bites", Colors.GOLD);
-
         while(true) {
+            UserInterface.printDivider();
+
+            UserInterface.printToConsole("""
+                 _   _                        _____                         \s
+                | | | |                      /  ___|                        \s
+                | |_| | ___  _ __ ___   ___  \\ `--.  ___ _ __ ___  ___ _ __ \s
+                |  _  |/ _ \\| '_ ` _ \\ / _ \\  `--. \\/ __| '__/ _ \\/ _ \\ '_ \\\s
+                | | | | (_) | | | | | |  __/ /\\__/ / (__| | |  __/  __/ | | |
+                \\_| |_/\\___/|_| |_| |_|\\___| \\____/ \\___|_|  \\___|\\___|_| |_|
+                """, Colors.GOLD);
+
             UserInterface.printDivider();
 
             int userChoice = UserInterface.promptForNumber("""

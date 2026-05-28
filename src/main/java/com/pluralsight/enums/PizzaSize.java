@@ -62,6 +62,8 @@ public enum PizzaSize {
     }
 
     public static void getAllSizes() {
-        Arrays.stream(PizzaSize.values()).map(PizzaSize::getDisplaySize).forEach(size -> System.out.println("◆ " + size + "\""));
+        Arrays.stream(PizzaSize.values())
+                .map(PizzaSize::getDisplaySize)
+                .forEach(size -> System.out.println("◆ " + size + "\""));
     }
 }

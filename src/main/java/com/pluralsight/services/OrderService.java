@@ -40,7 +40,7 @@ public class OrderService {
         order.getOrderItems().forEach(orderItem -> {
             UserInterface.printDivider();
 
-            UserInterface.printToConsole("ITEM ID: " + orderItem.getItemID(), Colors.TRON);
+            UserInterface.printToConsole("ITEM: " + orderItem.getItemID(), Colors.TRON);
 
             orderItem.getItem().orderDetails();
         });

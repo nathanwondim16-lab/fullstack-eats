@@ -1,6 +1,10 @@
 package com.pluralsight.ui;
 
 import com.pluralsight.enums.*;
+import com.pluralsight.exceptions.InvalidCrustException;
+import com.pluralsight.exceptions.InvalidMenuSelectionException;
+import com.pluralsight.exceptions.InvalidPizzaSizeException;
+import com.pluralsight.exceptions.InvalidToppingException;
 import com.pluralsight.models.*;
 import com.pluralsight.models.Knots;
 
@@ -36,7 +40,8 @@ public class PizzeriaScreen {
                       ____/______________\\____
                      /   HOT • FRESH • FAST   \\
                     /__________________________\\
-                     """, Colors.CRIMSON);
+                
+                """, Colors.CRIMSON);
 
         CrustType crustChoice = getCrustType();
         PizzaSize pizzaSize = getPizzaSize();
@@ -56,37 +61,40 @@ public class PizzeriaScreen {
     private static CrustType getCrustType() {
         while(true) {
             try {
+                UserInterface.printDivider();
+
                 UserInterface.printToConsole("⦿ CRUST OPTIONS:\n", Colors.GOLD);
                 CrustType.getAllCrusts();
 
-                return CrustType.valueOf(UserInterface.promptForInput("\nSELECT CRUST ❯ ").toUpperCase());
-            } catch (Exception e) {
-                UserInterface.invalidOption();
+                String crustChoice = UserInterface.promptForInput("\nSELECT CRUST ❯ ");
+
+                return Arrays.stream(CrustType.values())
+                        .filter(crustType -> crustType.name().equalsIgnoreCase(crustChoice))
+                        .findFirst()
+                        .orElseThrow(() -> new InvalidCrustException("Invalid crust type selected."));
+
+            } catch (InvalidCrustException e) {
+                UserInterface.handleException(e);
             }
         }
     }
 
     private static PizzaSize getPizzaSize() {
         while(true) {
-            UserInterface.printToConsole("\n⦿ PIZZA SIZES:\n", Colors.GOLD);
-            PizzaSize.getAllSizes();
-
             try {
-                int sizeChoice = Integer.parseInt(UserInterface.promptForInput("\nPIZZA SIZE ❯ "));
+                UserInterface.printDivider();
 
-                PizzaSize selectedSize = Arrays.stream(PizzaSize.values())
+                UserInterface.printToConsole("\n⦿ PIZZA SIZES:\n", Colors.GOLD);
+                PizzaSize.getAllSizes();
+
+                int sizeChoice = UserInterface.promptForNumber("\nPIZZA SIZE ❯ ");
+
+                return Arrays.stream(PizzaSize.values())
                         .filter(size -> size.getDisplaySize() == sizeChoice)
                         .findFirst()
-                        .orElse(null);
-
-                if(selectedSize != null) {
-                    return selectedSize;
-                }
-
-                UserInterface.invalidOption();
-
-            } catch (Exception e) {
-                UserInterface.invalidOption();
+                        .orElseThrow(() -> new InvalidPizzaSizeException("Invalid pizza size selected."));
+            } catch (InvalidPizzaSizeException e) {
+                UserInterface.handleException(e);
             }
         }
     }
@@ -104,18 +112,22 @@ public class PizzeriaScreen {
 
     private static void addToppingsByCategory(Pizza pizza, ToppingCategory category) {
         while(true) {
-            UserInterface.printDivider();
-
-            ToppingFormatter.displayToppings(PizzaToppings.class, category);
-
-            String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
-
-            if(toppingChoice.equalsIgnoreCase("skip")) {
-                break;
-            }
-
             try {
-                PizzaToppings selectedTopping = PizzaToppings.valueOf(toppingChoice);
+                UserInterface.printDivider();
+
+                ToppingFormatter.displayToppings(PizzaToppings.class, category);
+
+                String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
+
+                if(toppingChoice.equalsIgnoreCase("skip")) {
+                    break;
+                }
+
+                PizzaToppings selectedTopping = Arrays.stream(PizzaToppings.values())
+                        .filter(topping -> topping.name().equalsIgnoreCase(toppingChoice))
+                        .filter(topping -> topping.getCategory() == category)
+                        .findFirst()
+                        .orElseThrow(() -> new InvalidToppingException("Invalid pizza topping selected."));
 
                 boolean isExtra = UserInterface.promptForInput("Do you want extra " + selectedTopping + " on your pizza? ").equalsIgnoreCase("yes");
 
@@ -126,21 +138,38 @@ public class PizzeriaScreen {
                 if(finished.equalsIgnoreCase("yes")) {
                     break;
                 }
-            } catch (Exception e) {
-                UserInterface.invalidOption();
+            } catch (InvalidToppingException e) {
+                UserInterface.handleException(e);
             }
         }
     }
 
     public static Knots orderKnots() {
-        UserInterface.printToConsole("\nWHAT KNOTS WOULD YOU LIKE");
+        KnotsType knotsType = getKnotsType();
 
-        UserInterface.printToConsole(com.pluralsight.enums.Knots.displayKnots());
+        UserInterface.printToConsole("\n" + knotsType + " KNOTS ADDED TO ORDER ✅", Colors.GREEN);
 
-        com.pluralsight.enums.Knots knots = com.pluralsight.enums.Knots.valueOf(UserInterface.promptForInput("Select knots ❯ ").toUpperCase());
+        return new Knots(knotsType);
+    }
 
-        UserInterface.printToConsole("\n" + knots + " ADDED TO ORDER ✅", Colors.GREEN);
+    private static KnotsType getKnotsType() {
+        while(true) {
+            try {
+                UserInterface.printDivider();
 
-        return new Knots(knots);
+                UserInterface.printToConsole("\nWHAT KNOTS WOULD YOU LIKE\n", Colors.GOLD);
+                KnotsType.displayKnots();
+
+                String knotsChoice = UserInterface.promptForInput("\nSelect knots ❯ ");
+
+                return Arrays.stream(KnotsType.values())
+                        .filter(knot -> knot.name().equalsIgnoreCase(knotsChoice))
+                        .findFirst()
+                        .orElseThrow(() -> new InvalidMenuSelectionException("Invalid knots selected"));
+
+            } catch (InvalidMenuSelectionException e) {
+                UserInterface.handleException(e);
+            }
+        }
     }
 }

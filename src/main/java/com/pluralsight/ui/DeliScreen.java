@@ -50,12 +50,11 @@ public class DeliScreen {
 
                 String breadChoice = UserInterface.promptForInput("\nSELECT BREAD ❯ ");
 
-                UserInterface.printDivider();
-
                 return Arrays.stream(BreadType.values())
                         .filter(breadType -> breadType.name().equalsIgnoreCase(breadChoice))
                         .findFirst()
                         .orElseThrow(() -> new InvalidBreadTypeException("Invalid bread type selected."));
+
             } catch (InvalidBreadTypeException e) {
                 UserInterface.handleException(e);
             }
@@ -90,7 +89,8 @@ public class DeliScreen {
     }
 
     private static void addSandwichToppings(Sandwich sandwich) {
-        UserInterface.printToConsole("\n⦿ TOPPINGS:", Colors.GOLD);
+//        UserInterface.printDivider();
+//        UserInterface.printToConsole("\n⦿ TOPPINGS:", Colors.GOLD);
 
         Arrays.stream(ToppingCategory.values())
                 .forEach(category -> addToppingsByCategory(sandwich, category));
@@ -148,7 +148,7 @@ public class DeliScreen {
                 UserInterface.printDivider();
 
                 UserInterface.printToConsole("\nCHOOSE A DRINK BELOW", Colors.GOLD);
-                UserInterface.printToConsole(DrinkFlavors.displayFlavors());
+                DrinkFlavors.displayFlavors();
 
                 String flavorChoice = UserInterface.promptForInput("Select flavor ❯ ");
 
@@ -171,7 +171,7 @@ public class DeliScreen {
                 UserInterface.printDivider();
 
                 UserInterface.printToConsole("\nCHOOSE A SIZE", Colors.GOLD);
-                UserInterface.printToConsole(DrinkSize.displayDrinkSizes());
+                DrinkSize.displayDrinkSizes();
 
                 String drinkSize = UserInterface.promptForInput("Select size ❯ ");
 
@@ -200,8 +200,8 @@ public class DeliScreen {
             try {
                 UserInterface.printDivider();
 
-                UserInterface.printToConsole("\nWHAT CHIPS WOULD YOU LIKE", Colors.GOLD);
-                UserInterface.printToConsole(ChipFlavors.displayFlavors());
+                UserInterface.printToConsole("\nWHAT CHIPS WOULD YOU LIKE\n", Colors.GOLD);
+                ChipFlavors.displayFlavors();
 
                 String chipFlavor = (UserInterface.promptForInput("Select flavor ❯ "));
 

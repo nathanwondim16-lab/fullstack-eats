@@ -1,7 +1,6 @@
 package com.pluralsight.enums;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public enum ChipFlavors {
     LAYS,
@@ -12,7 +11,9 @@ public enum ChipFlavors {
     CHEETOS,
     TAKIS;
 
-    public static String displayFlavors() {
-        return Arrays.stream(ChipFlavors.values()).map(Enum::toString).collect(Collectors.joining(", "));
+    public static void displayFlavors() {
+        Arrays.stream(ChipFlavors.values())
+                .map(Enum::toString)
+                .forEach(flavor -> System.out.println("◆ " + flavor));
     }
 }

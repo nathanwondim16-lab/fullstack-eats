@@ -19,6 +19,8 @@ public enum CrustType {
     }
 
     public static void getAllCrusts() {
-        Arrays.stream(CrustType.values()).map(type -> "◆ " + type.displayName).forEach(System.out::println);
+        Arrays.stream(CrustType.values())
+                .map(type -> "◆ " + type.displayName)
+                .forEach(System.out::println);
     }
 }

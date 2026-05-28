@@ -1,17 +1,18 @@
 package com.pluralsight.models;
 
+import com.pluralsight.enums.KnotsType;
 import com.pluralsight.interfaces.Chargeable;
 import com.pluralsight.ui.UserInterface;
 
 public class Knots implements Chargeable {
-    private final com.pluralsight.enums.Knots knots;
+    private final KnotsType knotsType;
 
-    public Knots(com.pluralsight.enums.Knots knots) {
-        this.knots = knots;
+    public Knots(KnotsType knotsType) {
+        this.knotsType = knotsType;
     }
 
-    public com.pluralsight.enums.Knots getKnots() {
-        return knots;
+    public KnotsType getKnots() {
+        return knotsType;
     }
 
     @Override
@@ -25,7 +26,7 @@ public class Knots implements Chargeable {
   
                 %s
                 Price: $%.2f
-                """, knots.getDisplayName(), getPrice());
+                """, knotsType.getDisplayName(), getPrice());
     }
 
     @Override

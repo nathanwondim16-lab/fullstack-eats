@@ -39,8 +39,8 @@ public class OrderScreen {
                 case 3 -> order.addItemToOrder(DeliScreen.orderChips());
                 case 4 -> order.addItemToOrder(PizzeriaScreen.orderPizza());
                 case 5 -> order.addItemToOrder(PizzeriaScreen.orderKnots());
-                //case 6 -> order.addItemToOrder(); // Add Taco
-                //case 7 -> order.addItemToOrder(); // Add Chips & Salsa
+                case 6 -> order.addItemToOrder(TacoTruckScreen.orderTaco()); // Add Taco
+                case 7 -> order.addItemToOrder(TacoTruckScreen.orderChipsAndSalsa());
                 case 8 -> {
                     if(handleCheckout(order)) {
                         return;

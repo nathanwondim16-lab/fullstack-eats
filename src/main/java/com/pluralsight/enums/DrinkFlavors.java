@@ -1,7 +1,6 @@
 package com.pluralsight.enums;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public enum DrinkFlavors {
 
@@ -23,7 +22,9 @@ public enum DrinkFlavors {
         return flavor;
     }
 
-    public static String displayFlavors() {
-        return Arrays.stream(DrinkFlavors.values()).map(DrinkFlavors::getFlavor).collect(Collectors.joining(", "));
+    public static void displayFlavors() {
+        Arrays.stream(DrinkFlavors.values())
+                .map(DrinkFlavors::getFlavor)
+                .forEach(flavor -> System.out.println("◆ " + flavor));
     }
 }

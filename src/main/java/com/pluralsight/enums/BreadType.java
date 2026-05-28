@@ -19,6 +19,8 @@ public enum BreadType {
     }
 
     public static void getAllBreads() {
-        Arrays.stream(BreadType.values()).map(type -> "◆ " + type.displayName).forEach(System.out::println);
+        Arrays.stream(BreadType.values())
+                .map(type -> "◆ " + type.displayName)
+                .forEach(System.out::println);
     }
 }

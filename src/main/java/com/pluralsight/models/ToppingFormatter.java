@@ -43,6 +43,7 @@ public class ToppingFormatter {
 
         String headerFormat = "║ %-" + width + "s ║";
 
+        UserInterface.printToConsole("\n⦿ TOPPINGS:", Colors.GOLD);
         UserInterface.printToConsole(topBox, Colors.LIGHT_BLUE);
         UserInterface.printToConsole(String.format(headerFormat, tableName), Colors.LIGHT_BLUE);
         UserInterface.printToConsole(middleBox, Colors.LIGHT_BLUE);
