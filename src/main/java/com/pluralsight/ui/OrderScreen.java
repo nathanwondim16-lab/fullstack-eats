@@ -18,6 +18,18 @@ public class OrderScreen {
         while (true) {
             UserInterface.printDivider();
 
+            UserInterface.printToConsole("""
+                
+                     _____         _             _____                         \s
+                    |  _  |       | |           /  ___|                        \s
+                    | | | |_ __ __| | ___ _ __  \\ `--.  ___ _ __ ___  ___ _ __ \s
+                    | | | | '__/ _` |/ _ \\ '__|  `--. \\/ __| '__/ _ \\/ _ \\ '_ \\\s
+                    \\ \\_/ / | | (_| |  __/ |    /\\__/ / (__| | |  __/  __/ | | |
+                     \\___/|_|  \\__,_|\\___|_|    \\____/ \\___|_|  \\___|\\___|_| |_|
+                    """, Colors.GOLD);
+
+            UserInterface.printDivider();
+
             int userChoice = UserInterface.promptForNumber("""
                         1) Add Sandwich
                         2) Add Drink

@@ -8,6 +8,7 @@ public class HomeScreen {
             UserInterface.printDivider();
 
             UserInterface.printToConsole("""
+                
                  _   _                        _____                         \s
                 | | | |                      /  ___|                        \s
                 | |_| | ___  _ __ ___   ___  \\ `--.  ___ _ __ ___  ___ _ __ \s
