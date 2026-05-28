@@ -2,6 +2,7 @@ package com.pluralsight.ui;
 
 import com.pluralsight.enums.*;
 import com.pluralsight.models.*;
+import com.pluralsight.models.Knots;
 
 import java.util.Arrays;
 
@@ -131,15 +132,15 @@ public class PizzeriaScreen {
         }
     }
 
-    public static GarlicKnots orderKnots() {
+    public static Knots orderKnots() {
         UserInterface.printToConsole("\nWHAT KNOTS WOULD YOU LIKE");
 
-        UserInterface.printToConsole(Knots.displayKnots());
+        UserInterface.printToConsole(com.pluralsight.enums.Knots.displayKnots());
 
-        Knots knots = Knots.valueOf(UserInterface.promptForInput("Select knots ❯ ").toUpperCase());
+        com.pluralsight.enums.Knots knots = com.pluralsight.enums.Knots.valueOf(UserInterface.promptForInput("Select knots ❯ ").toUpperCase());
 
         UserInterface.printToConsole("\n" + knots + " ADDED TO ORDER ✅", Colors.GREEN);
 
-        return new GarlicKnots(knots);
+        return new Knots(knots);
     }
 }

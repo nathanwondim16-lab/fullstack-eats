@@ -1,24 +1,24 @@
 package com.pluralsight.models;
 
-import com.pluralsight.enums.ShellType;
+import com.pluralsight.enums.TacoType;
 import com.pluralsight.enums.TacoChoices;
 import com.pluralsight.enums.TacoToppings;
 import com.pluralsight.ui.UserInterface;
 
 public class Taco extends Food<TacoToppings> {
 
-    private final ShellType shellType;
+    private final TacoType tacoType;
     private final TacoChoices tacoChoice;
     private final boolean isCoveredInSalasAndQueso;
 
-    public Taco(ShellType shellType, TacoChoices tacoChoice, boolean isCoveredInSalasAndQueso) {
-        this.shellType = shellType;
+    public Taco(TacoType tacoType, TacoChoices tacoChoice, boolean isCoveredInSalasAndQueso) {
+        this.tacoType = tacoType;
         this.tacoChoice = tacoChoice;
         this.isCoveredInSalasAndQueso = isCoveredInSalasAndQueso;
     }
 
-    public ShellType getShellType() {
-        return shellType;
+    public TacoType getShellType() {
+        return tacoType;
     }
 
     public TacoChoices getTacoChoice() {
@@ -42,7 +42,7 @@ public class Taco extends Food<TacoToppings> {
         UserInterface.printToConsoleFormatted("""
                 ◦ Custom %s
                 \t\t• %s
-                """, tacoChoice, shellType);
+                """, tacoChoice, tacoType);
 
         displayToppings();
 

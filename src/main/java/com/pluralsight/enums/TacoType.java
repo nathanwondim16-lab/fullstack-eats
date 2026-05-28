@@ -1,6 +1,6 @@
 package com.pluralsight.enums;
 
-public enum ShellType {
+public enum TacoType {
     CORN,
     FLOUR,
     HARD_SHELL,

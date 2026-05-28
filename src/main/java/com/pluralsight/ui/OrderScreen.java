@@ -3,6 +3,8 @@ package com.pluralsight.ui;
 import com.pluralsight.enums.Colors;
 import com.pluralsight.io.ReceiptsFileManager;
 import com.pluralsight.models.Order;
+import com.pluralsight.services.OrderService;
+
 import java.time.LocalDate;
 
 public class OrderScreen {
@@ -10,10 +12,12 @@ public class OrderScreen {
     public static void startOrder() {
 
         Order order = new Order(LocalDate.now());
+        OrderService orderService = new OrderService();
         ReceiptsFileManager receiptsFileManager = new ReceiptsFileManager();
 
         while (true) {
             UserInterface.printDivider();
+
             int userChoice = UserInterface.promptForNumber("""
                     1) Add Sandwich
                     2) Add Drink
@@ -28,6 +32,7 @@ public class OrderScreen {
                     0) Cancel Order
                     
                     Select Option ❯\s""");
+
             switch (userChoice) {
                 case 1 -> order.addItemToOrder(DeliScreen.orderSandwich());
                 case 2 -> order.addItemToOrder(DeliScreen.orderDrink());
@@ -36,33 +41,58 @@ public class OrderScreen {
                 case 5 -> order.addItemToOrder(PizzeriaScreen.orderKnots());
                 //case 6 -> order.addItemToOrder(); // Add Taco
                 //case 7 -> order.addItemToOrder(); // Add Chips & Salsa
+
                 case 8 -> {
-                    order.displayOrderDetails();
-                    int confirmOrCancel = UserInterface.promptForNumber("""
+                    try {
+                        order.validateOrder();
+
+                        orderService.displayOrderDetails(order);
+
+                        int confirmOrCancel = UserInterface.promptForNumber("""
                             1) Confirm Order
                             2) Cancel Order
                             
                             Select Option ❯\s""");
-                    switch(confirmOrCancel) {
-                        case 1 -> {
-                            receiptsFileManager.save(order);
-                            UserInterface.confirmOrder();
-                            return;
-                        }
-                        case 2 -> {
-                            order.cancelOrder();
-                            UserInterface.printToConsole("\nORDER CANCELED ❌", Colors.GREEN);
-                            return;
-                        }
+                        switch(confirmOrCancel) {
+                            case 1 -> {
+                                receiptsFileManager.save(order);
+                                UserInterface.confirmOrder();
+                                return;
+                            }
+                            case 2 -> {
+                                order.cancelOrder();
+                                UserInterface.printToConsole("\nORDER CANCELED ❌", Colors.GREEN);
+                                return;
+                            }
 
-                        default -> UserInterface.invalidOption();
+                            default -> UserInterface.invalidOption();
+                        }
+                    } catch (RuntimeException e) {
+                        UserInterface.handleException(e);
                     }
                 }
-                case 9 -> order.editOrder();
-                case 10 -> {
-                    int itemID = UserInterface.promptForNumber("Enter the ID number of the item you wish to remove ❯ ");
-                    order.removeItemFromOrder(itemID);
+
+                case 9 -> {
+                    try {
+                        order.validateOrder();
+                        orderService.editOrder(order);
+                    } catch (RuntimeException e) {
+                        UserInterface.handleException(e);
+                    }
                 }
+
+                case 10 -> {
+                    try {
+                        order.validateOrder();
+
+                        int itemID = UserInterface.promptForNumber("Enter the ID number of the item you wish to remove ❯ ");
+
+                        orderService.removeItemFromOrder(order, itemID);
+                    } catch (RuntimeException e) {
+                        UserInterface.handleException(e);
+                    }
+                }
+
                 case 0 -> {
                     order.cancelOrder();
                     UserInterface.printToConsole("\nORDER CANCELED ❌", Colors.GREEN);

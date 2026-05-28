@@ -1,17 +1,16 @@
 package com.pluralsight.models;
 
-import com.pluralsight.enums.Knots;
 import com.pluralsight.interfaces.Chargeable;
 import com.pluralsight.ui.UserInterface;
 
-public class GarlicKnots implements Chargeable {
-    private final Knots knots;
+public class Knots implements Chargeable {
+    private final com.pluralsight.enums.Knots knots;
 
-    public GarlicKnots(Knots knots) {
+    public Knots(com.pluralsight.enums.Knots knots) {
         this.knots = knots;
     }
 
-    public Knots getKnots() {
+    public com.pluralsight.enums.Knots getKnots() {
         return knots;
     }
 

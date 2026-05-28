@@ -73,6 +73,7 @@ public class UserInterface {
 
         String filledBar = Colors.GREEN.colorize("█");
         String transparentBar = Colors.MUTED_GRAY.colorize("▓");
+
         for (int i = 0; i <= totalBars; i++) {
             String progressBar = filledBar.repeat(i) + transparentBar.repeat(totalBars - i);
 
@@ -95,5 +96,13 @@ public class UserInterface {
         } catch (InterruptedException e) {
             System.out.println("Something went wrong " + e.getMessage());
         }
+    }
+
+    public static void handleException(Throwable throwable) {
+        printDivider();
+
+        printToConsole("ERROR ❌ " + throwable.getMessage(), Colors.CRIMSON);
+
+        printDivider();
     }
 }

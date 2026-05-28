@@ -1,6 +1,10 @@
 package com.pluralsight.ui;
 
 import com.pluralsight.enums.*;
+import com.pluralsight.exceptions.InvalidBreadTypeException;
+import com.pluralsight.exceptions.InvalidMenuSelectionException;
+import com.pluralsight.exceptions.InvalidSandwichSizeException;
+import com.pluralsight.exceptions.InvalidToppingException;
 import com.pluralsight.models.*;
 import java.util.Arrays;
 
@@ -11,16 +15,16 @@ public class DeliScreen {
         UserInterface.printDivider();
 
         UserInterface.printToConsoleFormatted("""
-                ╔════════════════════════╗
-                ║   FULLSTACK DELI       ║
-                ║════════════════════════║
-                ║ 🥓  Ham & Bacon        ║
-                ║ 🧀 Swiss & Cheddar     ║
-                ║ 🥬 Fresh Veggies       ║
-                ║ 🔥 Toasted Subs        ║
-                ║                        ║
-                ║  ★ CODE. EAT. REPEAT ★ ║
-                ╚════════════════════════╝
+                ╔═════════════════════════╗
+                ║   FULLSTACK DELI        ║
+                ║═════════════════════════║
+                ║   🥓  Ham & Bacon       ║
+                ║   🧀 Swiss & Cheddar    ║
+                ║   🥬 Fresh Veggies      ║
+                ║   🔥 Toasted Subs       ║
+                ║                         ║
+                ║  ★ CODE. EAT. REPEAT ★  ║
+                ╚═════════════════════════╝
                 """, Colors.ORANGE_JUICE);
 
         BreadType breadChoice = getBreadType();
@@ -39,33 +43,45 @@ public class DeliScreen {
     private static BreadType getBreadType() {
         while(true) {
             try {
+                UserInterface.printDivider();
+
                 UserInterface.printToConsole("\n⦿ BREAD OPTIONS:\n", Colors.GOLD);
                 BreadType.getAllBreads();
 
-                return BreadType.valueOf(UserInterface.promptForInput("\nSELECT BREAD ❯ ").toUpperCase());
-            } catch (Exception e) {
-                UserInterface.invalidOption();
+                String breadChoice = UserInterface.promptForInput("\nSELECT BREAD ❯ ");
+
+                UserInterface.printDivider();
+
+                return Arrays.stream(BreadType.values())
+                        .filter(breadType -> breadType.name().equalsIgnoreCase(breadChoice))
+                        .findFirst()
+                        .orElseThrow(() -> new InvalidBreadTypeException("Invalid bread type selected."));
+            } catch (InvalidBreadTypeException e) {
+                UserInterface.handleException(e);
             }
         }
     }
 
     private static SandwichSize getSandwichSize() {
         while(true) {
-            UserInterface.printToConsole("\n⦿ BREAD SIZES:\n", Colors.GOLD);
-            SandwichSize.getAllSizes();
 
-            int sizeChoice = UserInterface.promptForNumber("\nSANDWICH SIZE ❯ ");
+            try {
+                UserInterface.printDivider();
 
-            SandwichSize selectedSize = Arrays.stream(SandwichSize.values())
-                    .filter(size -> size.getDisplaySize() == sizeChoice)
-                    .findFirst()
-                    .orElse(null);
+                UserInterface.printToConsole("\n⦿ SANDWICH SIZES:\n", Colors.GOLD);
+                SandwichSize.getAllSizes();
 
-            if(selectedSize != null) {
-                return selectedSize;
+                int sizeChoice = UserInterface.promptForNumber("\nSANDWICH SIZE ❯ ");
+
+                UserInterface.printDivider();
+
+                return Arrays.stream(SandwichSize.values())
+                        .filter(size -> size.getDisplaySize() == sizeChoice)
+                        .findFirst()
+                        .orElseThrow(() -> new InvalidSandwichSizeException("Invalid sandwich size selected."));
+            } catch (InvalidSandwichSizeException e) {
+                UserInterface.handleException(e);
             }
-
-            UserInterface.invalidOption();
         }
     }
 
@@ -82,18 +98,23 @@ public class DeliScreen {
 
     private static void addToppingsByCategory(Sandwich sandwich, ToppingCategory category) {
         while(true) {
-            UserInterface.printDivider();
-
-            ToppingFormatter.displayToppings(SandwichToppings.class, category);
-
-            String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
-
-            if(toppingChoice.equalsIgnoreCase("skip")) {
-                break;
-            }
 
             try {
-                SandwichToppings selectedTopping = SandwichToppings.valueOf(toppingChoice);
+                UserInterface.printDivider();
+
+                ToppingFormatter.displayToppings(SandwichToppings.class, category);
+
+                String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
+
+                if(toppingChoice.equalsIgnoreCase("skip")) {
+                    break;
+                }
+
+                SandwichToppings selectedTopping = Arrays.stream(SandwichToppings.values())
+                        .filter(topping -> topping.name().equalsIgnoreCase(toppingChoice))
+                        .filter(topping -> topping.getCategory() == category)
+                        .findFirst()
+                        .orElseThrow(() -> new InvalidToppingException("Invalid topping selected."));
 
                 boolean isExtra = UserInterface.promptForInput("Do you want extra " + selectedTopping + " on your sandwich? ").equalsIgnoreCase("yes");
 
@@ -104,39 +125,95 @@ public class DeliScreen {
                 if(finished.equalsIgnoreCase("yes")) {
                     break;
                 }
-            } catch (Exception e) {
-                UserInterface.invalidOption();
+
+                UserInterface.printDivider();
+            } catch (InvalidToppingException e) {
+                UserInterface.handleException(e);
             }
         }
     }
 
     public static Drink orderDrink() {
-        UserInterface.printToConsole("\nCHOOSE A DRINK BELOW");
-
-        UserInterface.printToConsole(DrinkFlavors.displayFlavors());
-
-        DrinkFlavors flavor = DrinkFlavors.valueOf(UserInterface.promptForInput("Select flavor ❯ ").toUpperCase());
-
-        UserInterface.printToConsole("\nCHOOSE A SIZE");
-
-        UserInterface.printToConsole(DrinkSize.displayDrinkSizes());
-
-        DrinkSize drinkSize = DrinkSize.valueOf(UserInterface.promptForInput("Select size ❯ ").toUpperCase());
+        DrinkFlavors flavor = getDrinkFlavor();
+        DrinkSize drinkSize = getDrinkSize();
 
         UserInterface.printToConsole("\n" + drinkSize + " " + flavor + " ADDED TO ORDER ✅", Colors.GREEN);
 
         return new Drink(flavor, drinkSize);
     }
 
+    private static DrinkFlavors getDrinkFlavor() {
+        while(true) {
+            try {
+                UserInterface.printDivider();
+
+                UserInterface.printToConsole("\nCHOOSE A DRINK BELOW", Colors.GOLD);
+                UserInterface.printToConsole(DrinkFlavors.displayFlavors());
+
+                String flavorChoice = UserInterface.promptForInput("Select flavor ❯ ");
+
+                UserInterface.printDivider();
+
+                return Arrays.stream(DrinkFlavors.values())
+                        .filter(flavor -> flavor.name().equalsIgnoreCase(flavorChoice))
+                        .findFirst()
+                        .orElseThrow(() -> new InvalidMenuSelectionException("Invalid drink flavor selected."));
+
+            } catch (InvalidMenuSelectionException e) {
+                UserInterface.handleException(e);
+            }
+        }
+    }
+
+    private static DrinkSize getDrinkSize() {
+        while(true) {
+            try {
+                UserInterface.printDivider();
+
+                UserInterface.printToConsole("\nCHOOSE A SIZE", Colors.GOLD);
+                UserInterface.printToConsole(DrinkSize.displayDrinkSizes());
+
+                String drinkSize = UserInterface.promptForInput("Select size ❯ ");
+
+                UserInterface.printDivider();
+
+                return Arrays.stream(DrinkSize.values())
+                        .filter(size -> size.name().equalsIgnoreCase(drinkSize))
+                        .findFirst()
+                        .orElseThrow(() -> new InvalidMenuSelectionException("Invalid drink size selected."));
+            } catch (InvalidMenuSelectionException e) {
+                UserInterface.handleException(e);
+            }
+        }
+    }
+
     public static Chips orderChips() {
-        UserInterface.printToConsole("\nWHAT CHIPS WOULD YOU LIKE");
-
-        UserInterface.printToConsole(ChipFlavors.displayFlavors());
-
-        ChipFlavors chips = ChipFlavors.valueOf(UserInterface.promptForInput("Select flavor ❯ ").toUpperCase());
+        ChipFlavors chips = getChipFlavor();
 
         UserInterface.printToConsole("\n" + chips + " CHIPS ADDED TO ORDER ✅", Colors.GREEN);
 
         return new Chips(chips);
+    }
+
+    private static ChipFlavors getChipFlavor() {
+        while(true) {
+            try {
+                UserInterface.printDivider();
+
+                UserInterface.printToConsole("\nWHAT CHIPS WOULD YOU LIKE", Colors.GOLD);
+                UserInterface.printToConsole(ChipFlavors.displayFlavors());
+
+                String chipFlavor = (UserInterface.promptForInput("Select flavor ❯ "));
+
+                UserInterface.printDivider();
+
+                return Arrays.stream(ChipFlavors.values())
+                        .filter(chips -> chips.name().equalsIgnoreCase(chipFlavor))
+                        .findFirst()
+                        .orElseThrow(() -> new InvalidMenuSelectionException("Invalid chip flavor selected."));
+            } catch (InvalidMenuSelectionException e) {
+                UserInterface.handleException(e);
+            }
+        }
     }
 }

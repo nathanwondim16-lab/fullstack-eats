@@ -1,36 +1,33 @@
 package com.pluralsight.models;
 
-import com.pluralsight.enums.Colors;
+import com.pluralsight.exceptions.EmptyOrderException;
 import com.pluralsight.interfaces.Chargeable;
-import com.pluralsight.ui.UserInterface;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private final List<OrderItem> order;
-    private int itemID = 0;
-    private static int orderID = 0;
-
+    private final List<OrderItem> orderItems;
+    private int itemID = 1;
+    private final int orderID;
+    private static int nextOrderID = 1;
     private final LocalDate orderDate;
 
     public Order(LocalDate orderDate) {
-        order = new ArrayList<>();
+        orderItems = new ArrayList<>();
+        this.orderID = nextOrderID++;
         this.orderDate = orderDate;
-        orderID++;
-        itemID++;
     }
 
-    public List<OrderItem> getOrder() {
-        return order;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
     public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public static int getOrderID() {
+    public int getOrderID() {
         return orderID;
     }
 
@@ -39,59 +36,45 @@ public class Order {
     }
 
     public void addItemToOrder(Chargeable item) {
-        order.add(new OrderItem(itemID++, item));
+        orderItems.add(new OrderItem(itemID++, item));
     }
 
-    public void removeItemFromOrder(int itemID) {
-        for(OrderItem orderItem : order) {
-            if(orderItem.getItemID() == itemID) {
-                order.remove(orderItem);
+    public boolean removeItemFromOrder(int itemID) {
+        boolean removed = orderItems.removeIf(orderItem -> orderItem.getItemID() == itemID);
 
-                // Sorts items back in order by ID
-                for(int i = 0; i < order.size(); i++) {
-                    order.get(i).setItemID(i + 1);
-                }
-
-                UserInterface.printToConsole("\nITEM HAS BEEN REMOVED ❌", Colors.GREEN);
-                return;
-            }
+        if(removed) {
+            resetItemIDs();
         }
 
-        UserInterface.printToConsole("CANNOT REMOVE ITEM SINCE IT DOESN'T EXIST IN ORDER ID: " + orderID, Colors.CRIMSON);
+        return removed;
     }
 
     public void cancelOrder() {
-        order.clear();
-        orderID--;
+        orderItems.clear();
     }
 
-    public void editOrder() {
-        UserInterface.printToConsole("\nHERE IS EVERYTHING YOU'VE ADDED TO YOUR ORDER SO FAR\n");
-        displayOrderDetails();
+    public double getTotal() {
+        return orderItems.stream()
+                .mapToDouble(item -> item.getItem().getPrice())
+                .sum();
+    }
 
-        int itemID = UserInterface.promptForNumber("Enter the ID number of the item you wish to edit ❯ ");
+    public boolean isEmpty() {
+        return orderItems.isEmpty();
+    }
 
-        OrderItem item = order.stream().filter(orderItem -> orderItem.getItemID() == itemID).findFirst().orElse(null);
-
-        if(item != null) {
-            item.getItem().editItem();
+    public void validateOrder() {
+        if(isEmpty()) {
+            throw new EmptyOrderException("CANNOT CHECKOUT AN EMPTY ORDER ❌");
         }
     }
 
-    public void displayOrderDetails() {
-        UserInterface.printToConsole("\nORDER ID: " + orderID + " DETAILS", Colors.GOLD);
-        order.forEach(orderItem -> {
-            UserInterface.printDivider();
-            UserInterface.printToConsole("ITEM ID: " + orderItem.getItemID(), Colors.TRON);
-            orderItem.getItem().orderDetails();
-        });
+    private void resetItemIDs() {
+        // Sorts items back in order by ID
+        for(int i = 0; i < orderItems.size(); i++) {
+            orderItems.get(i).setItemID(i + 1);
+        }
 
-        double total = order.stream().mapToDouble(orderItem -> orderItem.getItem().getPrice()).sum();
-
-        UserInterface.printDivider();
-        UserInterface.printToConsoleFormatted("""
-                
-                TOTAL: $%.2f
-                """, Colors.GREEN, total);
+        itemID = orderItems.size() + 1;
     }
 }
