@@ -5,8 +5,8 @@ import java.util.Arrays;
 public enum DrinkFlavors {
 
     // SODAS
-    SPRITE("Sprite"),
-    COCA_COLA("Coca-Cola"),
+    SPRITE("McDonald's Sprite"),
+    COCA_COLA("Coca Cola"),
     FANTA("Fanta"),
     PEPSI("Pepsi"),
     DR_PEPPER("Dr Pepper"),

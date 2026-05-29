@@ -2,7 +2,7 @@ package com.pluralsight.models;
 
 import com.pluralsight.exceptions.EmptyOrderException;
 import com.pluralsight.interfaces.Chargeable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,19 +11,26 @@ public class Order {
     private int itemID = 1;
     private final int orderID;
     private static int nextOrderID = 1;
-    private final LocalDate orderDate;
+    private LocalDateTime orderDate;
+    private final String name;
 
-    public Order(LocalDate orderDate) {
+    public Order() {
         orderItems = new ArrayList<>();
         this.orderID = nextOrderID++;
-        this.orderDate = orderDate;
+        this.name = "John Doe";
+    }
+
+    public Order(String name) {
+        orderItems = new ArrayList<>();
+        this.orderID = nextOrderID++;
+        this.name = name;
     }
 
     public List<OrderItem> getOrderItems() {
         return orderItems;
     }
 
-    public LocalDate getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
@@ -33,6 +40,10 @@ public class Order {
 
     public int getItemID() {
         return itemID;
+    }
+
+    public String getCustomerName() {
+        return name;
     }
 
     public void addItemToOrder(Chargeable item) {
@@ -57,6 +68,12 @@ public class Order {
         return orderItems.stream()
                 .mapToDouble(item -> item.getItem().getPrice())
                 .sum();
+    }
+
+    public void confirmOrder() {
+        if (orderDate == null) {
+            orderDate = LocalDateTime.now();
+        }
     }
 
     public boolean isEmpty() {

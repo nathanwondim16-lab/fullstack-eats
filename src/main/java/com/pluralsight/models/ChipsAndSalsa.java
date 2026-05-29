@@ -37,8 +37,5 @@ public class ChipsAndSalsa implements Chargeable {
         UserInterface.printToConsole("WHAT SALSA DO YOU WANT TO SWITCH TO");
 
         SalsaType.getSalsaOptions();
-
-
-
     }
 }

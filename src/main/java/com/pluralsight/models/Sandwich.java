@@ -121,11 +121,10 @@ public class Sandwich extends Food<SandwichToppings> {
 
         UserInterface.printToConsoleFormatted("""
                 \t\t%s
-                """, isToasted ? "• Toasted" : "");
-    }
+                """, isToasted ? "• TOASTED" : "");
 
-    @Override
-    public String preparingMessage() {
-        return "🥪Making Sandwich";
+        UserInterface.printToConsole(String.format("""
+                
+                %-10s $%.2f""", "Price:", getPrice()), Colors.GREEN);
     }
 }

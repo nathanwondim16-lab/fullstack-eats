@@ -1,5 +1,6 @@
 package com.pluralsight.models;
 
+import com.pluralsight.enums.Colors;
 import com.pluralsight.enums.CrustType;
 import com.pluralsight.enums.PizzaSize;
 import com.pluralsight.enums.PizzaToppings;
@@ -47,16 +48,16 @@ public class Pizza extends Food<PizzaToppings> {
 
         UserInterface.printToConsoleFormatted("""
                 \t\t%s
-                """, isCrustStuffed ? "• Stuffed Crust" : "");
+                """, isCrustStuffed ? "• STUFFED CRUST" : "");
+
+        UserInterface.printToConsole(String.format("""
+                
+                %-10s $%.2f
+                """, "Price:", getPrice()), Colors.GREEN);
     }
 
     @Override
     public void editItem() {
 
-    }
-
-    @Override
-    public String preparingMessage() {
-        return "🍕Baking Pizza";
     }
 }

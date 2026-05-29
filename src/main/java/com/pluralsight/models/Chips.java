@@ -1,6 +1,7 @@
 package com.pluralsight.models;
 
 import com.pluralsight.enums.ChipFlavors;
+import com.pluralsight.enums.Colors;
 import com.pluralsight.interfaces.Chargeable;
 import com.pluralsight.ui.UserInterface;
 
@@ -24,9 +25,13 @@ public class Chips implements Chargeable {
     public void orderDetails() {
         UserInterface.printToConsoleFormatted("""
   
-                Chips: %s
-                Price: $%.2f
-                """, flavor, getPrice());
+                %-10s %s
+                ""","Chips:", flavor);
+
+        UserInterface.printToConsole(String.format("""
+                
+                %-10s $%.2f
+                """, "Price:", getPrice()), Colors.GREEN);
     }
 
     @Override

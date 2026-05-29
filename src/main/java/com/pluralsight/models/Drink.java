@@ -1,5 +1,6 @@
 package com.pluralsight.models;
 
+import com.pluralsight.enums.Colors;
 import com.pluralsight.enums.DrinkFlavors;
 import com.pluralsight.enums.DrinkSize;
 import com.pluralsight.interfaces.Chargeable;
@@ -29,8 +30,12 @@ public class Drink implements Chargeable {
                 
                 %-10s %s
                 %-10s %s
+                """, "Drink:", flavor, "Size:", drinkSize);
+
+        UserInterface.printToConsole(String.format("""
+                
                 %-10s $%.2f
-                """, "Drink:", flavor, "Size:", drinkSize, "Price:", getPrice());
+                """, "Price:", getPrice()), Colors.GREEN);
     }
 
     @Override

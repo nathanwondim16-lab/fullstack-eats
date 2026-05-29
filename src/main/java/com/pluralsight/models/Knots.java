@@ -24,9 +24,9 @@ public class Knots implements Chargeable {
     public void orderDetails() {
         UserInterface.printToConsoleFormatted("""
   
-                %s
+                %s KNOTS
                 Price: $%.2f
-                """, knotsType.getDisplayName(), getPrice());
+                """, knotsType, getPrice());
     }
 
     @Override

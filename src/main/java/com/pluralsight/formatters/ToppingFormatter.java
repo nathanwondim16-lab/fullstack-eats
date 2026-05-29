@@ -1,7 +1,6 @@
-package com.pluralsight.models;
+package com.pluralsight.formatters;
 
 import com.pluralsight.enums.Colors;
-import com.pluralsight.enums.SandwichToppings;
 import com.pluralsight.enums.ToppingCategory;
 import com.pluralsight.interfaces.OrganizeToppings;
 import com.pluralsight.ui.UserInterface;

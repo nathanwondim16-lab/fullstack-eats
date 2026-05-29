@@ -1,8 +1,7 @@
 package com.pluralsight.interfaces;
 
-import com.pluralsight.models.Order;
+import java.nio.file.Path;
 
 public interface FileRepository<T> {
-
-    void save(T item);
+    Path save(T item);
 }

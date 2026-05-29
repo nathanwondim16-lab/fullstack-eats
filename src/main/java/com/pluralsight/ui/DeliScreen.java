@@ -5,6 +5,7 @@ import com.pluralsight.exceptions.InvalidBreadTypeException;
 import com.pluralsight.exceptions.InvalidMenuSelectionException;
 import com.pluralsight.exceptions.InvalidSandwichSizeException;
 import com.pluralsight.exceptions.InvalidToppingException;
+import com.pluralsight.formatters.ToppingFormatter;
 import com.pluralsight.models.*;
 import java.util.Arrays;
 
@@ -15,16 +16,20 @@ public class DeliScreen {
         UserInterface.printDivider();
 
         UserInterface.printToConsoleFormatted("""
-                ╔═════════════════════════╗
-                ║   FULLSTACK DELI        ║
-                ║═════════════════════════║
-                ║   🥓  Ham & Bacon       ║
-                ║   🧀 Swiss & Cheddar    ║
-                ║   🥬 Fresh Veggies      ║
-                ║   🔥 Toasted Subs       ║
-                ║                         ║
-                ║  ★ CODE. EAT. REPEAT ★  ║
-                ╚═════════════════════════╝
+                   ________________________
+                  /|                     /|
+                 / |   🥪 DELI SHOP 🥪  / |
+                /__|___________________/  |
+                |  |                   |  |
+                |  |   🍞 FRESH BREAD  |  |
+                |  |   🥓 HOT GRILL    |  |
+                |  |   🧀 MELT STATION |  |
+                |  |                   |  |
+                |  |   [  OPEN  ]      |  |
+                |  |      ____         |  |
+                |  |     |    |        |  |
+                |  |_____|____|________| /
+                | /____________________|/
                 """, Colors.ORANGE_JUICE);
 
         BreadType breadChoice = getBreadType();
@@ -85,13 +90,10 @@ public class DeliScreen {
     }
 
     private static boolean getToasted() {
-        return UserInterface.promptForInput("\nDo you want your sandwich toasted ❯ ").equalsIgnoreCase("yes");
+        return UserInterface.promptForInput("\nDo you want your sandwich toasted? ❯ ").equalsIgnoreCase("yes");
     }
 
     private static void addSandwichToppings(Sandwich sandwich) {
-//        UserInterface.printDivider();
-//        UserInterface.printToConsole("\n⦿ TOPPINGS:", Colors.GOLD);
-
         Arrays.stream(ToppingCategory.values())
                 .forEach(category -> addToppingsByCategory(sandwich, category));
     }
@@ -104,7 +106,7 @@ public class DeliScreen {
 
                 ToppingFormatter.displayToppings(SandwichToppings.class, category);
 
-                String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
+                String toppingChoice = UserInterface.promptForInput("\nENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
 
                 if(toppingChoice.equalsIgnoreCase("skip")) {
                     break;
@@ -137,7 +139,7 @@ public class DeliScreen {
         DrinkFlavors flavor = getDrinkFlavor();
         DrinkSize drinkSize = getDrinkSize();
 
-        UserInterface.printToConsole("\n" + drinkSize + " " + flavor + " ADDED TO ORDER ✅", Colors.GREEN);
+        UserInterface.printToConsole("\n" + drinkSize + " " + flavor.getFlavor().toUpperCase() + " ADDED TO ORDER ✅", Colors.GREEN);
 
         return new Drink(flavor, drinkSize);
     }
@@ -145,17 +147,16 @@ public class DeliScreen {
     private static DrinkFlavors getDrinkFlavor() {
         while(true) {
             try {
-                UserInterface.printDivider();
 
-                UserInterface.printToConsole("\nCHOOSE A DRINK BELOW", Colors.GOLD);
+                UserInterface.printToConsole("\nCHOOSE A DRINK BELOW\n", Colors.GOLD);
                 DrinkFlavors.displayFlavors();
 
-                String flavorChoice = UserInterface.promptForInput("Select flavor ❯ ");
+                String flavorChoice = UserInterface.promptForInput("\nSelect flavor ❯ ");
 
                 UserInterface.printDivider();
 
                 return Arrays.stream(DrinkFlavors.values())
-                        .filter(flavor -> flavor.name().equalsIgnoreCase(flavorChoice))
+                        .filter(flavor -> flavor.getFlavor().equalsIgnoreCase(flavorChoice))
                         .findFirst()
                         .orElseThrow(() -> new InvalidMenuSelectionException("Invalid drink flavor selected."));
 
@@ -170,10 +171,10 @@ public class DeliScreen {
             try {
                 UserInterface.printDivider();
 
-                UserInterface.printToConsole("\nCHOOSE A SIZE", Colors.GOLD);
+                UserInterface.printToConsole("\nCHOOSE A SIZE\n", Colors.GOLD);
                 DrinkSize.displayDrinkSizes();
 
-                String drinkSize = UserInterface.promptForInput("Select size ❯ ");
+                String drinkSize = UserInterface.promptForInput("\nSelect size ❯ ");
 
                 UserInterface.printDivider();
 
@@ -190,7 +191,7 @@ public class DeliScreen {
     public static Chips orderChips() {
         ChipFlavors chips = getChipFlavor();
 
-        UserInterface.printToConsole("\n" + chips + " CHIPS ADDED TO ORDER ✅", Colors.GREEN);
+        UserInterface.printToConsole("\n" + chips.getDisplayName() + " CHIPS ADDED TO ORDER ✅", Colors.GREEN);
 
         return new Chips(chips);
     }
@@ -203,12 +204,12 @@ public class DeliScreen {
                 UserInterface.printToConsole("\nWHAT CHIPS WOULD YOU LIKE\n", Colors.GOLD);
                 ChipFlavors.displayFlavors();
 
-                String chipFlavor = (UserInterface.promptForInput("Select flavor ❯ "));
+                String chipFlavor = (UserInterface.promptForInput("\nSelect flavor ❯ "));
 
                 UserInterface.printDivider();
 
                 return Arrays.stream(ChipFlavors.values())
-                        .filter(chips -> chips.name().equalsIgnoreCase(chipFlavor))
+                        .filter(chips -> chips.getDisplayName().equalsIgnoreCase(chipFlavor))
                         .findFirst()
                         .orElseThrow(() -> new InvalidMenuSelectionException("Invalid chip flavor selected."));
             } catch (InvalidMenuSelectionException e) {

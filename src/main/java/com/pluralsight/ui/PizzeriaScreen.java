@@ -5,6 +5,7 @@ import com.pluralsight.exceptions.InvalidCrustException;
 import com.pluralsight.exceptions.InvalidMenuSelectionException;
 import com.pluralsight.exceptions.InvalidPizzaSizeException;
 import com.pluralsight.exceptions.InvalidToppingException;
+import com.pluralsight.formatters.ToppingFormatter;
 import com.pluralsight.models.*;
 import com.pluralsight.models.Knots;
 
@@ -89,6 +90,8 @@ public class PizzeriaScreen {
 
                 int sizeChoice = UserInterface.promptForNumber("\nPIZZA SIZE ❯ ");
 
+                UserInterface.printDivider();
+
                 return Arrays.stream(PizzaSize.values())
                         .filter(size -> size.getDisplaySize() == sizeChoice)
                         .findFirst()
@@ -100,12 +103,10 @@ public class PizzeriaScreen {
     }
 
     private static boolean getStuffed() {
-        return UserInterface.promptForInput("\nDo you want your pizza's crust stuffed ❯ ").equalsIgnoreCase("yes");
+        return UserInterface.promptForInput("\nDo you want stuffed crust? ❯ ").equalsIgnoreCase("yes");
     }
 
     private static void addPizzaToppings(Pizza pizza) {
-        UserInterface.printToConsole("\n⦿ TOPPINGS:", Colors.GOLD);
-
         Arrays.stream(ToppingCategory.values())
                 .forEach(category -> addToppingsByCategory(pizza, category));
     }

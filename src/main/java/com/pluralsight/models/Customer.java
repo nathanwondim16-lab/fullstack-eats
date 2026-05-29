@@ -3,23 +3,16 @@ package com.pluralsight.models;
 import com.pluralsight.enums.Membership;
 import com.pluralsight.ui.UserInterface;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Customer {
-    private final String name;
     private final Order order;
     private Membership membership;
-    private LocalDateTime membershipDate;
+    private LocalDateTime joinedDate;
 
     public Customer(String name, Order order) {
-        this.name = name;
         this.order = order;
         membership = Membership.REGULAR;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Order getOrder() {
@@ -32,7 +25,7 @@ public class Customer {
 
     public void upgradeMembership() {
         membership = Membership.PREMIUM;
-        membershipDate = LocalDateTime.now();
+        joinedDate = LocalDateTime.now();
     }
 
     public void makePayment() {
@@ -41,15 +34,14 @@ public class Customer {
             return;
         }
 
-        membershipDate = LocalDateTime.now();
+        joinedDate = LocalDateTime.now();
     }
 
     public LocalDateTime getNextPaymentDate() {
-        return membershipDate.plusDays(30);
+        return joinedDate.plusDays(30);
     }
 
     public boolean isInGoodStanding() {
-        return membershipDate.isBefore(getNextPaymentDate());
+        return joinedDate.isBefore(getNextPaymentDate());
     }
-
 }

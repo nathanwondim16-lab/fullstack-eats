@@ -1,19 +1,24 @@
 package com.pluralsight.ui;
 
 import com.pluralsight.enums.Colors;
-import com.pluralsight.exceptions.InvalidMenuSelectionException;
 import com.pluralsight.io.ReceiptsFileManager;
 import com.pluralsight.models.Order;
 import com.pluralsight.services.OrderService;
 
-import java.time.LocalDate;
+import java.nio.file.Path;
 
 public class OrderScreen {
     private static final OrderService orderService = new OrderService();
     private static final ReceiptsFileManager receiptsFileManager = new ReceiptsFileManager();
 
     public static void startOrder() {
-        Order order = new Order(LocalDate.now());
+        UserInterface.printDivider();
+
+        String name = UserInterface.promptForInput("Enter your name: ");
+
+        UserInterface.printDivider();
+
+        Order order = new Order(name);
 
         while (true) {
             UserInterface.printDivider();
@@ -84,8 +89,10 @@ public class OrderScreen {
                                     Select Option ❯\s""");
             switch (confirmOrCancel) {
                 case 1 -> {
-                    receiptsFileManager.save(order);
+                    order.confirmOrder();
                     UserInterface.confirmOrder();
+                    Path receipt = receiptsFileManager.save(order);
+                    receiptsFileManager.printReceipt(receipt);
                     return true;
                 }
                 case 2 -> {
@@ -108,7 +115,9 @@ public class OrderScreen {
     private static void handleEditOrder(Order order) {
         try {
             order.validateOrder();
+
             orderService.editOrder(order);
+
         } catch(RuntimeException e) {
             UserInterface.handleException(e);
         }
@@ -117,6 +126,8 @@ public class OrderScreen {
     private static void handleRemoveItem(Order order) {
         try {
             order.validateOrder();
+
+            orderService.displayOrderDetails(order);
 
             int itemID = UserInterface.promptForNumber("Enter the ID number of the item you wish to remove ❯ ");
 

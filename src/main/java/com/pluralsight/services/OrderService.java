@@ -35,12 +35,13 @@ public class OrderService {
     }
 
     public void displayOrderDetails(Order order) {
-        UserInterface.printToConsole("\nORDER ID: " + order.getOrderID() + " DETAILS", Colors.GOLD);
+        UserInterface.printDivider();
 
+        UserInterface.printToConsole("\nORDER ID: " + order.getOrderID() + " DETAILS", Colors.GOLD);
         order.getOrderItems().forEach(orderItem -> {
             UserInterface.printDivider();
 
-            UserInterface.printToConsole("ITEM: " + orderItem.getItemID(), Colors.TRON);
+            UserInterface.printToConsole("ITEM " + orderItem.getItemID() + ":", Colors.TRON);
 
             orderItem.getItem().orderDetails();
         });
@@ -55,5 +56,7 @@ public class OrderService {
                 
                 TOTAL: $%.2f
                 """, Colors.GREEN, total);
+
+        UserInterface.printDivider();
     }
 }

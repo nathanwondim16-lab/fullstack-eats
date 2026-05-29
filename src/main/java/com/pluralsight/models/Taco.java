@@ -55,9 +55,4 @@ public class Taco extends Food<TacoToppings> {
     public void editItem() {
 
     }
-
-    @Override
-    public String preparingMessage() {
-        return "🌮Preparing Tacos";
-    }
 }

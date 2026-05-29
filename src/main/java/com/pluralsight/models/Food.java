@@ -2,6 +2,7 @@ package com.pluralsight.models;
 
 import com.pluralsight.enums.Colors;
 import com.pluralsight.enums.ToppingCategory;
+import com.pluralsight.formatters.ToppingFormatter;
 import com.pluralsight.interfaces.Chargeable;
 import com.pluralsight.interfaces.OrganizeToppings;
 import com.pluralsight.ui.UserInterface;
@@ -130,6 +131,4 @@ public abstract class Food<T extends Enum<T> & OrganizeToppings> implements Char
     public List<Topping<T>> getToppings() {
         return toppings;
     }
-
-    public abstract String preparingMessage();
 }

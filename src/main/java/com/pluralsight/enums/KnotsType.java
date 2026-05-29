@@ -3,10 +3,10 @@ package com.pluralsight.enums;
 import java.util.Arrays;
 
 public enum KnotsType {
-    GARLIC("Garlic 🧄"),
-    STUFFED("Stuffed 🥖"),
-    BUFFALO("Buffalo 🐃"),
-    LAMINATED("Laminated 🧄🧂🥖");
+    GARLIC("Garlic"),
+    STUFFED("Stuffed"),
+    BUFFALO("Buffalo"),
+    LAMINATED("Laminated");
 
     private final String displayName;
 

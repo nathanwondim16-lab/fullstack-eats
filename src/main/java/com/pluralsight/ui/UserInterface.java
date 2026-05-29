@@ -62,12 +62,12 @@ public class UserInterface {
 
     public static void confirmOrder() {
         UserInterface.printDivider();
+
         String[] confirmationMessage = {
                 "[ SYSTEM ] Creating Customer Ticket...",
                 "[ SYSTEM ] Syncing Order Database...",
                 "[ SYSTEM ] Reserving Inventory...",
                 "[ SYSTEM ] Sending Order To Kitchen...",
-                "[ SYSTEM ] Printing Receipt..."
         };
 
         Arrays.stream(confirmationMessage).forEach(message -> {
@@ -87,7 +87,7 @@ public class UserInterface {
 
             int percent = i * 100 / totalBars;
 
-            UserInterface.printOnSameLine(Colors.GREEN.colorize("\rSaving Order Details: " + progressBar + " " + percent + "%"));
+            UserInterface.printOnSameLine(Colors.GREEN.colorize("\rPrinting Receipt... " + progressBar + " " + percent + "%"));
 
             pauseProgram(150);
         }
