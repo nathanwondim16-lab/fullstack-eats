@@ -1,5 +1,9 @@
 package com.pluralsight.enums;
 
+import com.pluralsight.ui.UserInterface;
+
+import java.util.Arrays;
+
 public enum TacoType {
     CORN("Corn Tortilla"),
     FLOUR("Flour Tortilla"),
@@ -14,5 +18,10 @@ public enum TacoType {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public static void getTacoOptions() {
+        Arrays.stream(TacoType.values())
+                .forEach(type -> UserInterface.printToConsole("◆ " + type.getDisplayName()));
     }
 }

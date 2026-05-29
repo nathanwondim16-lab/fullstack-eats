@@ -1,5 +1,6 @@
 package com.pluralsight.models;
 
+import com.pluralsight.enums.Colors;
 import com.pluralsight.enums.SalsaType;
 import com.pluralsight.interfaces.Chargeable;
 import com.pluralsight.ui.UserInterface;
@@ -26,8 +27,11 @@ public class ChipsAndSalsa implements Chargeable {
         UserInterface.printToConsoleFormatted("""
   
                 Tortilla Chips & %s
-                Price: $%.2f
-                """, salsaType.getDisplayName(), getPrice());
+                """, salsaType.getDisplayName());
+
+        UserInterface.printToConsole(String.format("""
+                
+                %-10s $%.2f""", "Price:", getPrice()), Colors.GREEN);
     }
 
     @Override

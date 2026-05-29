@@ -43,9 +43,14 @@ public abstract class Food<T extends Enum<T> & OrganizeToppings> implements Char
 
     public void editToppings(Class<T> toppingEnum) {
         while(true) {
+            UserInterface.printDivider();
+
             UserInterface.printToConsole("\nCURRENT TOPPINGS", Colors.GOLD);
             displayToppings();
-            UserInterface.printToConsole("What do you want to do?", Colors.GOLD);
+
+            UserInterface.printDivider();
+
+            UserInterface.printToConsole("\nWHAT DO YOU WANT TO DO?", Colors.GOLD);
             int choice = UserInterface.promptForNumber("""
                    
                     
@@ -55,6 +60,8 @@ public abstract class Food<T extends Enum<T> & OrganizeToppings> implements Char
                     0) Done
                     
                     Select Option ❯\s""");
+
+            UserInterface.printDivider();
 
             switch(choice) {
                 case 1 -> addToppingToItem(toppingEnum);
@@ -71,11 +78,15 @@ public abstract class Food<T extends Enum<T> & OrganizeToppings> implements Char
     }
 
     private void addToppingToItem(Class<T> toppingEnum) {
+        UserInterface.printDivider();
+
         displayAvailableToppings(toppingEnum);
 
         T toppingType = promptForTopping(toppingEnum, "\nENTER TOPPING TO ADD ❯ ");
 
         boolean isExtra = UserInterface.promptForInput("Do you want extra " + toppingType + " on your sandwich? ").equalsIgnoreCase("yes");
+
+        UserInterface.printDivider();
 
         addTopping(new Topping<>(toppingType, isExtra));
 
@@ -83,6 +94,8 @@ public abstract class Food<T extends Enum<T> & OrganizeToppings> implements Char
     }
 
     private void removeToppingFromItem(Class<T> toppingEnum) {
+        UserInterface.printDivider();
+
         T toppingType = promptForTopping(toppingEnum, "\nENTER TOPPING TO REMOVE ❯ ");
 
         Topping<T> toppingToRemove = findTopping(toppingType);
@@ -92,6 +105,8 @@ public abstract class Food<T extends Enum<T> & OrganizeToppings> implements Char
         }
 
         removeTopping(toppingToRemove);
+
+        UserInterface.printDivider();
 
         UserInterface.printToConsole("\nTOPPING HAS BEEN REMOVED ❌", Colors.GREEN);
     }

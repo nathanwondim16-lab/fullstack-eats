@@ -69,7 +69,7 @@ public class Sandwich extends Food<SandwichToppings> {
     }
 
     private void changeSize() {
-        UserInterface.printToConsole("\nWHAT SIZE DO YOU WANT TO CHANGE YOUR SANDWICH TO?", Colors.GOLD);
+        UserInterface.printToConsole("\nWHICH SIZE DO YOU WANT TO CHANGE YOUR SANDWICH TO?", Colors.GOLD);
 
         SandwichSize.getAllSizes();
 

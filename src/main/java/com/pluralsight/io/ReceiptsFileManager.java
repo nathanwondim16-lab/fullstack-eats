@@ -25,12 +25,12 @@ public class ReceiptsFileManager implements FileRepository<Order> {
             Path receiptsFolder = Path.of("data", "Receipts");
             Files.createDirectories(receiptsFolder);
 
-            Path receiptPath = receiptsFolder.resolve(fileName);
+            Path receiptLocation = receiptsFolder.resolve(fileName);
 
-            try (PrintWriter writer = new PrintWriter(receiptPath.toFile())) {
+            try (PrintWriter writer = new PrintWriter(receiptLocation.toFile())) {
                 writer.println(ReceiptFormatter.format(order));
             }
-            return receiptPath;
+            return receiptLocation;
         } catch (Exception e) {
             UserInterface.handleException(e);
             return null;

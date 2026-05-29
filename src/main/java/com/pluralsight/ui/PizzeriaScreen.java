@@ -118,7 +118,7 @@ public class PizzeriaScreen {
 
                 ToppingFormatter.displayToppings(PizzaToppings.class, category);
 
-                String toppingChoice = UserInterface.promptForInput("ENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
+                String toppingChoice = UserInterface.promptForInput("\nENTER TOPPING OR SAY SKIP ❯ ").toUpperCase();
 
                 if(toppingChoice.equalsIgnoreCase("skip")) {
                     break;
@@ -129,6 +129,31 @@ public class PizzeriaScreen {
                         .filter(topping -> topping.getCategory() == category)
                         .findFirst()
                         .orElseThrow(() -> new InvalidToppingException("Invalid pizza topping selected."));
+
+                Topping<PizzaToppings> existingTopping = pizza.getToppings().stream()
+                        .filter(topping -> topping.getType() == selectedTopping)
+                        .findFirst()
+                        .orElse(null);
+
+                if(existingTopping != null) {
+                    if (existingTopping.isExtra()) {
+                        throw new InvalidToppingException(selectedTopping + " is already added as extra.");
+                    }
+
+                    boolean upgradeToExtra = UserInterface.promptForInput(selectedTopping + "is already added. Upgrade it to extra? ").equalsIgnoreCase("yes");
+
+                    if (upgradeToExtra) {
+                        pizza.getToppings().remove(existingTopping);
+                        pizza.addTopping(new Topping<>(selectedTopping, true));
+
+                        UserInterface.printDivider();
+
+                        UserInterface.printToConsole("\n" + selectedTopping + " UPGRADED TO EXTRA ✅", Colors.GREEN);
+
+                        UserInterface.printDivider();
+                    }
+                    continue;
+                }
 
                 boolean isExtra = UserInterface.promptForInput("Do you want extra " + selectedTopping + " on your pizza? ").equalsIgnoreCase("yes");
 

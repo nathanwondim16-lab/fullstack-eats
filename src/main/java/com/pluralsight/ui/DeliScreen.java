@@ -1,10 +1,7 @@
 package com.pluralsight.ui;
 
 import com.pluralsight.enums.*;
-import com.pluralsight.exceptions.InvalidBreadTypeException;
-import com.pluralsight.exceptions.InvalidMenuSelectionException;
-import com.pluralsight.exceptions.InvalidSandwichSizeException;
-import com.pluralsight.exceptions.InvalidToppingException;
+import com.pluralsight.exceptions.*;
 import com.pluralsight.formatters.ToppingFormatter;
 import com.pluralsight.models.*;
 import java.util.Arrays;
@@ -117,6 +114,32 @@ public class DeliScreen {
                         .filter(topping -> topping.getCategory() == category)
                         .findFirst()
                         .orElseThrow(() -> new InvalidToppingException("Invalid topping selected."));
+
+                Topping<SandwichToppings> existingTopping = sandwich.getToppings().stream()
+                        .filter(topping -> topping.getType() == selectedTopping)
+                        .findFirst()
+                        .orElse(null);
+
+                if(existingTopping != null) {
+                    if(existingTopping.isExtra()) {
+                        throw new InvalidToppingException(selectedTopping + " is already added as extra");
+                    }
+
+                    boolean upgradeToExtra = UserInterface.promptForInput(selectedTopping + " is already added. Upgrade it to extra? ").equalsIgnoreCase("yes");
+
+                    if(upgradeToExtra) {
+                        sandwich.getToppings().remove(existingTopping);
+                        sandwich.addTopping(new Topping<>(selectedTopping, true));
+
+                        UserInterface.printDivider();
+
+                        UserInterface.printToConsole("\n" + selectedTopping + " UPGRADED TO EXTRA ✅", Colors.GREEN);
+
+                        UserInterface.printDivider();
+                    }
+
+                    continue;
+                }
 
                 boolean isExtra = UserInterface.promptForInput("Do you want extra " + selectedTopping + " on your sandwich? ").equalsIgnoreCase("yes");
 
