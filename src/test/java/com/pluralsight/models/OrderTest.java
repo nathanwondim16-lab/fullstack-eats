@@ -21,21 +21,21 @@ class OrderTest {
     }
 
     @Test
-    public void removeItemFromOrder_shouldRemoveItemFrom() {
+    public void removeItemFromOrder_ShouldRemoveItemFrom() {
         // Arrange
         Order order = new Order();
         order.addItemToOrder(new Chips(ChipFlavors.DORITOS));
 
         // Act
-        boolean removed = order.removeItemFromOrder(1);
+        boolean isRemoved = order.removeItemFromOrder(1);
 
         // Assert
-        assertTrue(removed);
+        assertTrue(isRemoved);
         assertTrue(order.isEmpty());
     }
 
     @Test
-    public void validateOrder_shouldThrowException_whenOrderIsEmpty() {
+    public void validateOrder_ShouldThrowException_whenOrderIsEmpty() {
         // Arrange
         Order order = new Order();
 
@@ -44,7 +44,7 @@ class OrderTest {
     }
 
     @Test
-    public void confirmOrder_shouldSetOrderDate() {
+    public void confirmOrder_ShouldSetOrderDate() {
         // Arrange
         Order order = new Order();
 
