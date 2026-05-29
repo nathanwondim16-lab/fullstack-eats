@@ -36,6 +36,7 @@ public class OrderScreen {
             UserInterface.printDivider();
 
             int userChoice = UserInterface.promptForNumber("""
+                       
                         1) Add Sandwich
                         2) Add Drink
                         3) Add Chips
@@ -45,9 +46,9 @@ public class OrderScreen {
                         7) Add Chips & Salsa
                         8) Checkout
                         9) Edit Order
-                        10) Remove Item From Order
+                       10) Remove Item From Order
                         0) Cancel Order
-                        
+                       
                         Select Option ❯\s""");
 
             switch (userChoice) {
