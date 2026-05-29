@@ -72,7 +72,7 @@ public class TacoTruckScreen {
                 String tacoChoice = UserInterface.promptForInput("\nSELECT TACO CHOICE ❯ ");
 
                 return Arrays.stream(TacoChoices.values())
-                        .filter(choice -> choice.name().equalsIgnoreCase(tacoChoice))
+                        .filter(choice -> choice.getDisplayName().equalsIgnoreCase(tacoChoice))
                         .findFirst()
                         .orElseThrow(() -> new InvalidMenuSelectionException("Invalid taco choice selected."));
             } catch (InvalidMenuSelectionException e) {
@@ -166,7 +166,7 @@ public class TacoTruckScreen {
                 String salsaChoice = UserInterface.promptForInput("\nSELECT SALSA ❯ ");
 
                 return Arrays.stream(SalsaType.values())
-                        .filter(salsa -> salsa.name().equalsIgnoreCase(salsaChoice))
+                        .filter(salsa -> salsa.getDisplayName().equalsIgnoreCase(salsaChoice))
                         .findFirst()
                         .orElseThrow(() -> new InvalidMenuSelectionException("Invalid salsa selection."));
             } catch (InvalidMenuSelectionException e) {

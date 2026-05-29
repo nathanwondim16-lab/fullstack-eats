@@ -47,7 +47,8 @@ public class OrderScreen {
                         8) Checkout
                         9) Edit Order
                        10) Remove Item From Order
-                        0) Cancel Order
+                       
+                       0) Cancel Order
                        
                         Select Option ❯\s""");
 
@@ -86,6 +87,7 @@ public class OrderScreen {
             int confirmOrCancel = UserInterface.promptForNumber("""
                                     1) Confirm Order
                                     2) Cancel Order
+                                    3) Go Back
                                     
                                     Select Option ❯\s""");
             switch (confirmOrCancel) {
@@ -100,6 +102,9 @@ public class OrderScreen {
                     order.cancelOrder();
                     UserInterface.printToConsole("\nORDER CANCELED ❌", Colors.GREEN);
                     return true;
+                }
+                case 3 -> {
+                    return false;
                 }
 
                 default -> {

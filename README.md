@@ -226,11 +226,13 @@ Receipts are automatically saved to the Receipts directory.
 
 Example:
 
+```text
 data/
 └── Receipts/
     ├── 20260529-091015.txt
     ├── 20260529-093422.txt
     └── 20260529-101530.txt
+```
 
 Each receipt contains:
 
@@ -239,6 +241,48 @@ Each receipt contains:
 * Itemized pricing
 * Total cost
 * Timestamp information
+
+---
+
+## Project Structure 
+## Project Structure 📁
+
+```text
+fullstack-eats/
+├── data/
+│   └── Receipts/
+│       ├── 20260529-091015.txt
+│       ├── 20260529-093422.txt
+│       └── ...
+│
+├── images/
+│   └── (README screenshots and assets)
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com.pluralsight/
+│   │   │       ├── enums/
+│   │   │       ├── exceptions/
+│   │   │       ├── formatters/
+│   │   │       ├── interfaces/
+│   │   │       ├── io/
+│   │   │       ├── models/
+│   │   │       ├── services/
+│   │   │       ├── ui/
+│   │   │       └── Main.java
+│   │   │
+│   │   └── resources/
+│   │
+│   └── test/
+│       └── java/
+│           └── com.pluralsight/
+│               ├── io/
+│               └── models/
+│
+├── pom.xml
+└── README.md
+```
 
 ---
 

@@ -3,9 +3,9 @@ package com.pluralsight.enums;
 import java.util.Arrays;
 
 public enum SalsaType {
-    SALSA_ROJA("Salsa Roja (Red Sauce)"),
-    SALSA_VERDE("Salsa Verde (Green Sauce)"),
-    PICO_DE_GALLO("Pico de Gallo (Salsa Fresca)"),
+    SALSA_ROJA("Salsa Roja"),
+    SALSA_VERDE("Salsa Verde"),
+    PICO_DE_GALLO("Pico de Gallo"),
     FRUIT_AND_MANGO_SALSA("Fruit & Mango Salsa"),
     CHIPOTLE_SALSA("Chipotle Salsa");
 
@@ -21,7 +21,7 @@ public enum SalsaType {
 
     public static void getSalsaOptions() {
         Arrays.stream(SalsaType.values())
-                .map(Enum::toString)
+                .map(SalsaType::getDisplayName)
                 .forEach(salsa -> System.out.println("◆ " + salsa));
     }
 }
